@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -10,20 +11,29 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOut, User } from "lucide-react";
 import { Logo } from "./logo";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const { data: session, status } = useSession();
+  console.log(session);
 
-  const navItems = [
+  const publicNavItems = [
     { name: "Home", href: "/" },
     { name: "Projects", href: "/projects" },
     { name: "Blogs", href: "/blogs" },
     { name: "Skills", href: "/skills" },
     { name: "About", href: "/about" },
-    { name: "Dashboard", href: "/dashboard" },
   ];
+
+  const navItems = session
+    ? [...publicNavItems, { name: "Dashboard", href: "/dashboard" }]
+    : publicNavItems;
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/" });
+  };
 
   return (
     <nav className="fixed top-6 inset-x-4 h-16 max-w-screen-xl mx-auto rounded-full bg-black/80 backdrop-blur-xl border border-white/10 z-50 shadow-2xl shadow-black/50 transition-all duration-300 hover:shadow-3xl hover:shadow-black/60">
@@ -58,11 +68,27 @@ const Navbar = () => {
 
         {/* Actions + Mobile Menu */}
         <div className="flex items-center gap-4 md:gap-6">
-          <Button className="hidden md:block rounded-full px-6 py-2 text-sm md:text-base bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transform hover:scale-105 transition-all duration-300">
-            <Link href="/login" className="block w-full text-center">
-              Login
-            </Link>
-          </Button>
+          {/* Desktop Actions */}
+          {session ? (
+            <div className="hidden md:flex items-center gap-3">
+              <span className="text-gray-300 text-sm">
+                Welcome, {session.user?.name || session.user?.email}
+              </span>
+              <Button
+                onClick={handleLogout}
+                className="rounded-full px-6 py-2 text-sm md:text-base bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-red-500/25 transform hover:scale-105 transition-all duration-300"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <Button className="hidden md:block rounded-full px-6 py-2 text-sm md:text-base bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transform hover:scale-105 transition-all duration-300">
+              <Link href="/login" className="block w-full text-center">
+                Login
+              </Link>
+            </Button>
+          )}
 
           {/* Mobile Menu (Sheet) */}
           <Sheet>
@@ -98,11 +124,29 @@ const Navbar = () => {
                     {item.name}
                   </Link>
                 ))}
-                <Button className="rounded-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                  <Link href="/login" className="block w-full text-center">
-                    Login
-                  </Link>
-                </Button>
+
+                {/* Mobile Actions */}
+                {session ? (
+                  <div className="mt-4 space-y-3">
+                    <div className="px-4 py-2 text-gray-300 text-sm border-t border-white/10 pt-4">
+                      <User className="w-4 h-4 inline mr-2" />
+                      {session.user?.name || session.user?.email}
+                    </div>
+                    <Button
+                      onClick={handleLogout}
+                      className="w-full rounded-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
+                  <Button className="rounded-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <Link href="/login" className="block w-full text-center">
+                      Login
+                    </Link>
+                  </Button>
+                )}
               </nav>
             </SheetContent>
           </Sheet>

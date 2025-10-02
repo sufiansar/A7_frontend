@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
+
 import {
   Form,
   FormControl,
@@ -17,9 +17,11 @@ import { signIn } from "next-auth/react";
 
 import Password from "@/components/ui/Password";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm<FieldValues>({
     defaultValues: {
@@ -30,25 +32,27 @@ export default function LoginForm() {
 
   const onSubmit = async (values: FieldValues) => {
     setIsLoading(true);
+    console.log("Login attempt with:", values.email, values.password);
+
     try {
-      const res = await signIn("credentials", {
+      const result = await signIn("credentials", {
         ...values,
-        redirect: false, // stop auto redirect
-        callbackUrl: "/",
+        callbackUrl: "/dashboard",
       });
 
-      if (res?.ok) {
-        toast.success("Login successful");
-        window.location.href = "/"; // manual redirect
-      } else {
-        toast.error(res?.error || "Invalid credentials");
-       
+      console.log("SignIn result:", result);
+
+      if (result?.error) {
+        toast.error("Invalid email or password");
+      } else if (result?.ok) {
+        toast.success("Logged in successfully");
+        router.push("/dashboard");
       }
-    } catch (err) {
-      console.error("Login error:", err);
-      toast.error("Something went wrong. Please try again."); 
-    } finally {
       setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      toast.error("An unexpected error occurred");
+      console.error("Login error:", error);
     }
   };
 
@@ -103,13 +107,6 @@ export default function LoginForm() {
           </Button>
         </form>
       </Form>
-
-      <p className="text-center text-slate-400 text-sm">
-        Don’t have an account?{" "}
-        <Link href="/register" className="text-blue-400 hover:underline">
-          Register
-        </Link>
-      </p>
     </div>
   );
 }
