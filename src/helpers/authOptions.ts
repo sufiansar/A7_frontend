@@ -52,21 +52,30 @@ export const authOptions: NextAuthOptions = {
               }),
             }
           );
+
           if (!res?.ok) {
             console.error("Login Failed", await res.text());
+            return null;
           }
-          const user = await res.json();
-          console.log("User response:", user);
 
-          if (user?.id) {
+          const response = await res.json();
+          console.log("User response:", response);
+
+          // Handle your actual API response format: { data: { user: {...} } }
+          if (response?.data?.user?.id) {
+            const user = response.data.user;
             return {
               id: user.id,
               name: user.name,
               email: user.email,
+              image: user.picture || null,
             };
           }
 
           console.error("No user ID in response");
+          console.error(
+            "Expected format: { data: { user: { id, name, email, ... } } }"
+          );
           return null;
         } catch (err) {
           console.error("Authorize Error:", err);
@@ -75,18 +84,26 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  // callbacks: {
-  //   async jwt({ token, user }) {
-  //     if (user) token.id = user.id;
-  //     return token;
-  //   },
-  //   async session({ session, token }) {
-  //     if (session.user && token.id) {
-  //       session.user.id = token.id;
-  //     }
-  //     return session;
-  //   },
-  // },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.picture = user.image;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.picture;
+      }
+      return session;
+    },
+  },
   secret: process.env.AUTH_SECRET,
   pages: {
     signIn: "/",
