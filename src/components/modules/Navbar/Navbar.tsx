@@ -17,7 +17,6 @@ import { Logo } from "./logo";
 const Navbar = () => {
   const pathname = usePathname();
   const { data: session, status } = useSession();
-  console.log(session);
 
   const publicNavItems = [
     { name: "Home", href: "/" },

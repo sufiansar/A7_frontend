@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { getBlogs, deleteBlog } from "@/actions/createApi";
+import { getBlogs, deleteBlog } from "@/actions/blogApi";
+import { BlogPost } from "@/interfaces";
 import { useRouter } from "next/navigation";
 import {
   Plus,
@@ -16,27 +17,8 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-interface Blog {
-  id: string;
-  title: string;
-  slug: string;
-  content: string;
-  excerpt?: string;
-  coverImage?: string;
-  tags: string[];
-  published: boolean;
-  createdAt: string;
-  updatedAt: string;
-  author: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  authorId: string;
-}
-
-export default function DashboardBlogsPage() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+export default function BlogManagementDashboard() {
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [deleteModal, setDeleteModal] = useState<{
@@ -56,7 +38,6 @@ export default function DashboardBlogsPage() {
       const data = await getBlogs();
       setBlogs(data);
     } catch (error) {
-      console.error("Error fetching blogs:", error);
       toast.error("Failed to load blogs");
     } finally {
       setLoading(false);
@@ -77,13 +58,11 @@ export default function DashboardBlogsPage() {
     setDeleting(id);
     setDeleteModal({ isOpen: false, blog: null });
 
-    // Show loading toast
     const loadingToast = toast.loading("Deleting blog...");
 
     try {
       const result = await deleteBlog(id);
 
-      // Dismiss loading toast
       toast.dismiss(loadingToast);
 
       if (result.success) {
@@ -93,7 +72,6 @@ export default function DashboardBlogsPage() {
         toast.error(result.error || "Failed to delete blog");
       }
     } catch (error) {
-      console.error("Error deleting blog:", error);
       toast.dismiss(loadingToast);
       toast.error("An unexpected error occurred");
     } finally {
@@ -116,7 +94,7 @@ export default function DashboardBlogsPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
+
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">
             Manage{" "}
@@ -134,7 +112,7 @@ export default function DashboardBlogsPage() {
           </Link>
         </div>
 
-        {/* Stats */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <h3 className="text-gray-400 text-sm font-medium">Total Blogs</h3>
@@ -156,7 +134,7 @@ export default function DashboardBlogsPage() {
           </div>
         </div>
 
-        {/* Blogs Table */}
+
         {blogs.length === 0 ? (
           <div className="bg-gray-800 rounded-lg border border-gray-700 p-12 text-center">
             <FileText className="w-16 h-16 text-gray-600 mx-auto mb-4" />
@@ -252,7 +230,7 @@ export default function DashboardBlogsPage() {
 
                       <td className="p-4">
                         <div className="flex items-center gap-2 justify-end">
-                          {/* View Button */}
+
                           <Link
                             href={`/blogs/${blog.id}`}
                             className="p-2 text-gray-400 hover:text-blue-400 transition-colors"
@@ -261,7 +239,7 @@ export default function DashboardBlogsPage() {
                             <Eye className="w-4 h-4" />
                           </Link>
 
-                          {/* Edit Button */}
+
                           <Link
                             href={`/dashboard/blogs/edit/${blog.id}`}
                             className="p-2 text-gray-400 hover:text-yellow-400 transition-colors"
@@ -270,7 +248,7 @@ export default function DashboardBlogsPage() {
                             <Edit className="w-4 h-4" />
                           </Link>
 
-                          {/* Delete Button */}
+
                           <button
                             onClick={() => handleDelete(blog.id, blog.title)}
                             disabled={deleting === blog.id}
@@ -294,7 +272,7 @@ export default function DashboardBlogsPage() {
         )}
       </div>
 
-      {/* Delete Confirmation Modal */}
+
       {deleteModal.isOpen && deleteModal.blog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-lg p-6 max-w-md w-mx-4 border border-gray-700">
@@ -308,7 +286,7 @@ export default function DashboardBlogsPage() {
             <p className="text-gray-300 mb-6">
               Are you sure you want to delete{" "}
               <span className="font-semibold text-white">
-                "{deleteModal.blog.title}"
+                &quot;{deleteModal.blog.title}&quot;
               </span>
               ? This action cannot be undone.
             </p>

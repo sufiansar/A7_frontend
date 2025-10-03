@@ -3,13 +3,8 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import {
-  delay150,
-  delay300,
-  fadeInUp,
-  float,
-  pulseUnderline,
-} from "@/lib/animations";
+import { ArrowRight, Send } from "lucide-react";
+import { delay150, delay300, fadeInUp, float } from "@/lib/animations";
 
 const HeroSection = () => {
   return (
@@ -44,7 +39,7 @@ const HeroSection = () => {
           <h1
             className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight ${fadeInUp} ${delay150}`}
           >
-            Hi, I'm{" "}
+            Hi, I&apos;m{" "}
             <span className="relative inline-block">
               <span className="bg-gradient-to-r from-gray-300 via-white to-gray-400 bg-clip-text text-transparent">
                 Md. Abu Sufian
@@ -74,19 +69,7 @@ const HeroSection = () => {
               <Button className="w-full group relative bg-gradient-to-r from-gray-800 to-black hover:from-gray-700 hover:to-gray-900 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full transform hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-black/50 overflow-hidden border border-gray-700">
                 <span className="relative z-10 flex items-center">
                   View My Projects
-                  <svg
-                    className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-gray-600 to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </Button>
@@ -97,20 +80,8 @@ const HeroSection = () => {
                 className="w-full group px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-full border-2 border-white/50 text-white hover:bg-white hover:text-black transform hover:scale-105 transition-all duration-300 hover:shadow-xl backdrop-blur-sm bg-white/10"
               >
                 <span className="flex items-center">
-                  Let's Connect
-                  <svg
-                    className="w-5 h-5 ml-2 group-hover:rotate-45 transition-transform"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                    />
-                  </svg>
+                  Let&apos;s Connect
+                  <Send className="w-5 h-5 ml-2 group-hover:rotate-45 transition-transform" />
                 </span>
               </Button>
             </Link>

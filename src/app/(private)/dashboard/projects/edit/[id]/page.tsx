@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { getProjectById, updateProject } from "@/actions/createApi";
+import { getProjectById, updateProject } from "@/actions/projectApi";
 import ImageUpload from "@/components/ImageUpload";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
 
@@ -98,14 +98,15 @@ export default function EditProjectPage() {
 
       formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
+      formDataToSend.append("excerpt", formData.description.substring(0, 200));
       formDataToSend.append("technologies", formData.technologies);
       formDataToSend.append("liveUrl", formData.liveUrl);
       formDataToSend.append("githubUrl", formData.githubUrl);
       formDataToSend.append("featured", String(formData.featured));
-      formDataToSend.append("imageUrl", currentImageUrl);
+      formDataToSend.append("status", "active");
 
       if (projectImageFile) {
-        formDataToSend.append("imageFile", projectImageFile);
+        formDataToSend.append("file", projectImageFile);
       }
 
       const result = await updateProject(projectId, formDataToSend);
@@ -117,7 +118,6 @@ export default function EditProjectPage() {
         toast.error(result?.error || "Failed to update project");
       }
     } catch (error) {
-      console.error("Error updating project:", error);
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -135,7 +135,7 @@ export default function EditProjectPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
+
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold">
@@ -156,11 +156,11 @@ export default function EditProjectPage() {
           </Link>
         </div>
 
-        {/* Form */}
+
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
           <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
             <div className="grid gap-6">
-              {/* Title */}
+
               <div>
                 <label
                   htmlFor="title"
@@ -180,7 +180,7 @@ export default function EditProjectPage() {
                 />
               </div>
 
-              {/* Description */}
+
               <div>
                 <label
                   htmlFor="description"
@@ -200,9 +200,9 @@ export default function EditProjectPage() {
                 />
               </div>
 
-              {/* Technologies and Project Image Row */}
+
               <div className="grid md:grid-cols-2 gap-6">
-                {/* Technologies */}
+
                 <div>
                   <label
                     htmlFor="technologies"
@@ -225,7 +225,7 @@ export default function EditProjectPage() {
                   </p>
                 </div>
 
-                {/* Project Image */}
+
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Project Image
@@ -238,9 +238,9 @@ export default function EditProjectPage() {
                 </div>
               </div>
 
-              {/* URLs Row */}
+
               <div className="grid md:grid-cols-2 gap-6">
-                {/* Live URL */}
+
                 <div>
                   <label
                     htmlFor="liveUrl"
@@ -255,11 +255,11 @@ export default function EditProjectPage() {
                     value={formData.liveUrl}
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://your-project.com"
+                    placeholder="https://example.com"
                   />
                 </div>
 
-                {/* GitHub URL */}
+
                 <div>
                   <label
                     htmlFor="githubUrl"
@@ -274,12 +274,12 @@ export default function EditProjectPage() {
                     value={formData.githubUrl}
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://github.com/username/repository"
+                    placeholder="https://example.com"
                   />
                 </div>
               </div>
 
-              {/* Featured Checkbox */}
+
               <div className="flex items-center">
                 <input
                   type="checkbox"
@@ -297,7 +297,7 @@ export default function EditProjectPage() {
                 </label>
               </div>
 
-              {/* Action Buttons */}
+
               <div className="flex gap-4 pt-6 border-t border-gray-700">
                 <button
                   type="submit"

@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { getProjects, deleteProject } from "@/actions/createApi";
+import { getProjects, deleteProject } from "@/actions/projectApi";
+import { ProjectItem } from "@/interfaces";
 import { useRouter } from "next/navigation";
 import {
   Plus,
@@ -17,27 +18,8 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  technologies: string[];
-  liveUrl?: string;
-  githubUrl?: string;
-  imageUrl?: string;
-  featured: boolean;
-  createdAt: string;
-  updatedAt: string;
-  author: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  authorId: string;
-}
-
-export default function DashboardProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
+export default function ProjectManagementDashboard() {
+  const [projects, setProjects] = useState<ProjectItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [deleteModal, setDeleteModal] = useState<{
@@ -57,7 +39,6 @@ export default function DashboardProjectsPage() {
       const data = await getProjects();
       setProjects(data);
     } catch (error) {
-      console.error("Error fetching projects:", error);
       toast.error("Failed to load projects");
     } finally {
       setLoading(false);
@@ -78,13 +59,11 @@ export default function DashboardProjectsPage() {
     setDeleting(id);
     setDeleteModal({ isOpen: false, project: null });
 
-    // Show loading toast
     const loadingToast = toast.loading("Deleting project...");
 
     try {
       const result = await deleteProject(id);
 
-      // Dismiss loading toast
       toast.dismiss(loadingToast);
 
       if (result.success) {
@@ -94,7 +73,6 @@ export default function DashboardProjectsPage() {
         toast.error(result.error || "Failed to delete project");
       }
     } catch (error) {
-      console.error("Error deleting project:", error);
       toast.dismiss(loadingToast);
       toast.error("An unexpected error occurred");
     } finally {
@@ -117,7 +95,7 @@ export default function DashboardProjectsPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
+
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">
             Manage{" "}
@@ -135,7 +113,7 @@ export default function DashboardProjectsPage() {
           </Link>
         </div>
 
-        {/* Stats */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
             <h3 className="text-gray-400 text-sm font-medium">
@@ -159,7 +137,7 @@ export default function DashboardProjectsPage() {
           </div>
         </div>
 
-        {/* Projects Table */}
+
         {projects.length === 0 ? (
           <div className="bg-gray-800 rounded-lg border border-gray-700 p-12 text-center">
             <FolderOpen className="w-16 h-16 text-gray-600 mx-auto mb-4" />
@@ -267,7 +245,7 @@ export default function DashboardProjectsPage() {
 
                       <td className="p-4">
                         <div className="flex items-center gap-2 justify-end">
-                          {/* View Live Button */}
+
                           {project.liveUrl && (
                             <a
                               href={project.liveUrl}
@@ -280,7 +258,7 @@ export default function DashboardProjectsPage() {
                             </a>
                           )}
 
-                          {/* View GitHub Button */}
+
                           {project.githubUrl && (
                             <a
                               href={project.githubUrl}
@@ -293,7 +271,7 @@ export default function DashboardProjectsPage() {
                             </a>
                           )}
 
-                          {/* Edit Button */}
+
                           <Link
                             href={`/dashboard/projects/edit/${project.id}`}
                             className="p-2 text-gray-400 hover:text-yellow-400 transition-colors"
@@ -302,7 +280,7 @@ export default function DashboardProjectsPage() {
                             <Edit className="w-4 h-4" />
                           </Link>
 
-                          {/* Delete Button */}
+
                           <button
                             onClick={() =>
                               handleDelete(project.id, project.title)
@@ -327,7 +305,7 @@ export default function DashboardProjectsPage() {
           </div>
         )}
 
-        {/* Delete Confirmation Modal */}
+
         {deleteModal.isOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 max-w-md w-full mx-4">
@@ -355,7 +333,7 @@ export default function DashboardProjectsPage() {
                 <p className="text-gray-300">
                   Are you sure you want to delete{" "}
                   <span className="font-semibold text-white">
-                    "{deleteModal.project?.title}"
+                    &quot;{deleteModal.project?.title}&quot;
                   </span>
                   ? This will permanently remove the project and all its data.
                 </p>

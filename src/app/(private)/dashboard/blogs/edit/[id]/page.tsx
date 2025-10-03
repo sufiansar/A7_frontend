@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { ArrowLeft, Save, AlertCircle } from "lucide-react";
-import { getBlogById, updateBlog } from "@/actions/createApi";
+import { getBlogById, updateBlog } from "@/actions/blogApi";
 import ImageUpload from "@/components/ImageUpload";
 
 interface Blog {
@@ -22,10 +22,11 @@ interface Blog {
 }
 
 interface EditBlogPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default function EditBlogPage({ params }: EditBlogPageProps) {
+  const { id } = use(params);
   const router = useRouter();
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
@@ -44,7 +45,7 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const blogData = await getBlogById(params.id);
+        const blogData = await getBlogById(id);
         if (blogData) {
           setBlog(blogData);
           setFormData({
@@ -59,17 +60,16 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
           setError("Blog not found");
         }
       } catch (err) {
-        console.error("Error fetching blog:", err);
         setError("Failed to load blog");
       } finally {
         setLoading(false);
       }
     };
 
-    if (params.id) {
+    if (id) {
       fetchBlog();
     }
-  }, [params.id]);
+  }, [id]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -85,7 +85,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Basic validation
     if (!formData.title.trim() || !formData.content.trim()) {
       setError("Title and content are required");
       return;
@@ -107,15 +106,17 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
       formDataToSend.append("content", formData.content.trim());
       formDataToSend.append("excerpt", formData.excerpt.trim());
       formDataToSend.append("tags", tagsArray.join(","));
-      formDataToSend.append("coverImage", formData.coverImage.trim());
       formDataToSend.append("published", formData.published.toString());
 
-      // Add image file if present
       if (coverImageFile) {
-        formDataToSend.append("coverImageFile", coverImageFile);
+        formDataToSend.append("file", coverImageFile);
       }
 
-      const result = await updateBlog(params.id, formDataToSend);
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(`${key}:`, value);
+      }
+
+      const result = await updateBlog(id, formDataToSend);
 
       if (result) {
         toast.success("Blog updated successfully! ✨");
@@ -166,7 +167,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="max-w-4xl mx-auto p-6">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <Link
@@ -181,7 +181,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
           </div>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
@@ -192,7 +191,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
             </div>
           )}
 
-          {/* Title */}
           <div>
             <label
               htmlFor="title"
@@ -212,7 +210,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
             />
           </div>
 
-          {/* Excerpt */}
           <div>
             <label
               htmlFor="excerpt"
@@ -231,7 +228,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
             />
           </div>
 
-          {/* Cover Image */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Cover Image
@@ -243,7 +239,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
             />
           </div>
 
-          {/* Tags */}
           <div>
             <label
               htmlFor="tags"
@@ -265,7 +260,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
             </p>
           </div>
 
-          {/* Content */}
           <div>
             <label
               htmlFor="content"
@@ -285,7 +279,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
             />
           </div>
 
-          {/* Published Status */}
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -303,7 +296,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
             </label>
           </div>
 
-          {/* Submit Button */}
           <div className="flex gap-4 pt-6">
             <button
               type="submit"

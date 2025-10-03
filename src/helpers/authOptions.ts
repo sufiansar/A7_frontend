@@ -64,7 +64,6 @@ export const authOptions: NextAuthOptions = {
           const response = await res.json();
           console.log("User response:", response);
 
-          // Handle your actual API response format: { data: { user: {...}, accessToken: ... } }
           if (response?.data?.user?.id) {
             const user = response.data.user;
             return {
@@ -95,7 +94,7 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name;
         token.email = user.email;
         token.picture = user.image;
-        token.accessToken = (user as any).accessToken;
+        token.accessToken = (user as { accessToken?: string }).accessToken;
       }
       return token;
     },

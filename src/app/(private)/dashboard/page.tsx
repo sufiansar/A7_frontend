@@ -1,8 +1,13 @@
 import { AppSidebar } from "@/components/modules/sidebar/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/helpers/authOptions";
 
-export default function Page() {
+export default async function Page() {
+  const session = await getServerSession(authOptions);
+  const userName = session?.user?.name || "Admin";
+
   return (
     <SidebarProvider
       style={
@@ -20,11 +25,13 @@ export default function Page() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 bg-gray-900">
               <div className="px-4 lg:px-6">
                 <h1 className="text-3xl font-bold text-white mb-2">
-                  Welcome to Portfolio Dashboard
+                  Welcome back, {userName}!
                 </h1>
-                <p className="text-gray-400">
-                  Manage your projects, skills, and portfolio content from here.
-                </p>
+                {session?.user?.email && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    Logged in as: {session.user.email}
+                  </p>
+                )}
               </div>
             </div>
           </div>

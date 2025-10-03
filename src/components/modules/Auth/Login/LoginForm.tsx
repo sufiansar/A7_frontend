@@ -31,28 +31,25 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (values: FieldValues) => {
-    setIsLoading(true);
-    console.log("Login attempt with:", values.email, values.password);
-
     try {
-      const result = await signIn("credentials", {
-        ...values,
-        callbackUrl: "/dashboard",
-      });
+      setIsLoading(true);
 
-      console.log("SignIn result:", result);
+      const result = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
 
       if (result?.error) {
         toast.error("Invalid email or password");
-      } else if (result?.ok) {
-        toast.success("Logged in successfully");
+      } else {
+        toast.success("Login successful!");
         router.push("/dashboard");
       }
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       toast.error("An unexpected error occurred");
-      console.error("Login error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

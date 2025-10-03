@@ -22,7 +22,7 @@ export default function ImageUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const maxSizeMB = 5;
-  const maxSize = maxSizeMB * 1024 * 1024; // 5MB
+  const maxSize = maxSizeMB * 1024 * 1024; 
   const acceptedTypes = [
     "image/png",
     "image/jpeg",
@@ -105,7 +105,7 @@ export default function ImageUpload({
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-      {/* Drop area */}
+
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}

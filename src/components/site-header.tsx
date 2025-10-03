@@ -20,7 +20,7 @@ export function SiteHeader() {
             className="hidden sm:flex text-gray-300 hover:text-white hover:bg-gray-800"
           >
             <a
-              href="https://github.com/sufiansar/A7_frontend"
+              href="https://github.com/sufiansar"
               rel="noopener noreferrer"
               target="_blank"
               className="text-gray-300 hover:text-white"

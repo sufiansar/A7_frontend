@@ -43,8 +43,8 @@ const About = () => {
               </h1>
 
               <p className="text-xl text-gray-300 leading-relaxed">
-                Hi, I'm Md. Abu Sufian, a final year Computer Science &
-                Engineering student at Dhaka International University. I'm
+                Hi, I&apos;m Md. Abu Sufian, a final year Computer Science &
+                Engineering student at Dhaka International University. I&apos;m
                 passionate about web development and currently learning modern
                 technologies to build my skills.
               </p>
@@ -61,7 +61,7 @@ const About = () => {
                   variant="outline"
                   className="px-8 py-3 rounded-full border-2 border-white/70 text-white hover:bg-white hover:text-black backdrop-blur-sm bg-white/10"
                 >
-                  Let's Connect
+                  Let&apos;s Connect
                 </Button>
               </Link>
             </div>
@@ -83,15 +83,16 @@ const About = () => {
                 Final Year • Expected Graduation: 2025
               </p>
               <p className="text-gray-400 mt-3">
-                Currently completing my Bachelor's degree in CSE, focusing on
-                software development, algorithms, and modern web technologies.
+                Currently completing my Bachelor&apos;s degree in CSE, focusing
+                on software development, algorithms, and modern web
+                technologies.
               </p>
             </div>
           </div>
 
           <div className="space-y-8">
             <h2 className="text-3xl font-bold text-white">
-              Technologies I'm Learning
+              Technologies I&apos;m Learning
             </h2>
 
             <div className="space-y-6">
@@ -168,21 +169,21 @@ const About = () => {
           <div className="max-w-4xl mx-auto space-y-6 text-gray-300 leading-relaxed">
             <p>
               As a final year CSE student at Dhaka International University,
-              I've discovered my passion for web development and creating
+              I&apos;ve discovered my passion for web development and creating
               digital solutions. My journey started with basic programming
               concepts and has evolved into building full-stack web
               applications.
             </p>
             <p>
-              Currently, I'm focusing on mastering modern web technologies like
-              React, Next.js, and Node.js. Each project I work on teaches me
-              something new and helps me grow as a developer. I believe in
+              Currently, I&apos;m focusing on mastering modern web technologies
+              like React, Next.js, and Node.js. Each project I work on teaches
+              me something new and helps me grow as a developer. I believe in
               learning by doing and constantly challenging myself with new
               technologies and concepts.
             </p>
             <p>
-              As I prepare to graduate and enter the professional world, I'm
-              excited to apply my knowledge in real-world projects and
+              As I prepare to graduate and enter the professional world,
+              I&apos;m excited to apply my knowledge in real-world projects and
               contribute to meaningful software solutions.
             </p>
           </div>
@@ -190,16 +191,16 @@ const About = () => {
 
         <div className="text-center space-y-8">
           <h2 className="text-3xl md:text-4xl font-bold text-white">
-            Let's{" "}
+            Let&apos;s{" "}
             <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               Connect
             </span>{" "}
             and Learn Together
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            I'm always eager to learn from others, collaborate on projects, and
-            discuss new technologies. Let's connect and explore opportunities
-            together.
+            I&apos;m always eager to learn from others, collaborate on projects,
+            and discuss new technologies. Let&apos;s connect and explore
+            opportunities together.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact">

@@ -1,36 +1,75 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { createSkill } from "@/actions/skillApi";
+import { updateSkill } from "@/actions/skillApi";
+import { SkillItem, DynamicPageProps } from "@/interfaces";
 import { ArrowLeft, Save, Upload, X } from "lucide-react";
 import Image from "next/image";
 
-export default function CreateSkillForm() {
-  const [loading, setLoading] = useState(false);
+export default function EditSkillForm({ params }: DynamicPageProps) {
+  const { id } = use(params);
+  const [skill, setSkill] = useState<SkillItem | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
   const [previewIcon, setPreviewIcon] = useState<string | null>(null);
   const router = useRouter();
 
+  useEffect(() => {
+    const fetchSkill = async () => {
+      try {
+        setLoading(true);
+
+        const { getSkills } = await import("@/actions/skillApi");
+        const allSkills = await getSkills();
+
+        const skillData = allSkills?.find((skill: any) => {
+          return skill._id === id || skill.id === id;
+        });
+
+        if (skillData) {
+          setSkill(skillData);
+          setPreviewIcon(skillData.iconUrl || null);
+        } else {
+          toast.error("Skill not found");
+          router.push("/dashboard/skills");
+        }
+      } catch (error) {
+        toast.error("Failed to fetch skill");
+        router.push("/dashboard/skills");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchSkill();
+    }
+  }, [id, router]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
+    setUpdating(true);
 
     try {
       const formData = new FormData(e.currentTarget);
-      const result = await createSkill(formData);
+      const result = await updateSkill(id, formData);
 
       if (result.error) {
         toast.error(result.error);
+      } else if (result.success) {
+        toast.success("Skill updated successfully!");
+        router.push("/dashboard/skills");
       } else {
-        toast.success("Skill created successfully!");
+        toast.success("Skill updated successfully!");
         router.push("/dashboard/skills");
       }
     } catch (error) {
-      toast.error("Failed to create skill");
+      toast.error("Failed to update skill");
     } finally {
-      setLoading(false);
+      setUpdating(false);
     }
   };
 
@@ -46,12 +85,28 @@ export default function CreateSkillForm() {
   };
 
   const clearPreview = () => {
-    setPreviewIcon(null);
+    setPreviewIcon(skill?.iconUrl || null);
     const fileInput = document.getElementById("iconFile") as HTMLInputElement;
     if (fileInput) {
       fileInput.value = "";
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white text-lg">Loading skill...</div>
+      </div>
+    );
+  }
+
+  if (!skill) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white text-lg">Skill not found</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -65,9 +120,9 @@ export default function CreateSkillForm() {
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <h1 className="text-3xl font-bold">
-            Create New{" "}
+            Edit{" "}
             <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Skill
+              {skill.name}
             </span>
           </h1>
         </div>
@@ -88,6 +143,7 @@ export default function CreateSkillForm() {
                 id="name"
                 name="name"
                 required
+                defaultValue={skill.name}
                 placeholder="e.g., React, Node.js, Python"
                 className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400"
               />
@@ -104,6 +160,7 @@ export default function CreateSkillForm() {
               <select
                 id="level"
                 name="level"
+                defaultValue={skill.level || ""}
                 className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
               >
                 <option value="">Select level (optional)</option>
@@ -130,7 +187,7 @@ export default function CreateSkillForm() {
                     className="cursor-pointer bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg px-4 py-3 flex items-center gap-2 transition-colors"
                   >
                     <Upload className="w-5 h-5 text-blue-400" />
-                    <span className="text-gray-300">Choose Icon</span>
+                    <span className="text-gray-300">Change Icon</span>
                   </label>
                   <input
                     type="file"
@@ -140,7 +197,7 @@ export default function CreateSkillForm() {
                     onChange={handleIconChange}
                     className="hidden"
                   />
-                  {previewIcon && (
+                  {previewIcon && previewIcon !== skill.iconUrl && (
                     <button
                       type="button"
                       onClick={clearPreview}
@@ -154,7 +211,11 @@ export default function CreateSkillForm() {
 
                 {previewIcon && (
                   <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                    <p className="text-sm text-gray-300 mb-2">Icon Preview:</p>
+                    <p className="text-sm text-gray-300 mb-2">
+                      {previewIcon === skill.iconUrl
+                        ? "Current Icon:"
+                        : "New Icon Preview:"}
+                    </p>
                     <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl">
                       <Image
                         src={previewIcon}
@@ -168,9 +229,26 @@ export default function CreateSkillForm() {
                 )}
 
                 <p className="text-sm text-gray-400">
-                  Upload an icon for your skill (PNG, JPG, SVG recommended). Max
-                  size: 5MB
+                  Upload a new icon for your skill (PNG, JPG, SVG recommended).
+                  Max size: 5MB
                 </p>
+              </div>
+            </div>
+
+
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+              <h3 className="text-sm font-medium text-gray-300 mb-2">
+                Skill Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-400">
+                <div>
+                  <span className="font-medium">Created:</span>{" "}
+                  {new Date(skill.createdAt).toLocaleDateString()}
+                </div>
+                <div>
+                  <span className="font-medium">Last Updated:</span>{" "}
+                  {new Date(skill.updatedAt).toLocaleDateString()}
+                </div>
               </div>
             </div>
 
@@ -184,18 +262,18 @@ export default function CreateSkillForm() {
               </Link>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={updating}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
               >
-                {loading ? (
+                {updating ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Creating...
+                    Updating...
                   </>
                 ) : (
                   <>
                     <Save className="w-5 h-5" />
-                    Create Skill
+                    Update Skill
                   </>
                 )}
               </button>

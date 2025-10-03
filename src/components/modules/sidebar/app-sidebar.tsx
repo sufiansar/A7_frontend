@@ -9,13 +9,11 @@ import {
   IconArticle,
   IconPlus,
   IconEye,
-  IconSettings,
   IconLogout,
 } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -113,11 +111,6 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Settings",
-      url: "/dashboard/settings",
-      icon: IconSettings,
-    },
-    {
       title: "Logout",
       url: "/api/auth/signout",
       icon: IconLogout,
@@ -171,9 +164,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <NavSecondary items={data.navSecondary} className="text-gray-300" />
         </div>
       </SidebarContent>
-      <SidebarFooter className="bg-gray-900 border-t border-gray-800">
-        <NavUser user={data.user} />
-      </SidebarFooter>
     </Sidebar>
   );
 }

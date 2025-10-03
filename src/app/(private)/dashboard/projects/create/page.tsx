@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { createProject } from "@/actions/createApi";
+import { createProject } from "@/actions/projectApi";
 import ImageUpload from "@/components/ImageUpload";
 import { ArrowLeft, Plus, Loader2 } from "lucide-react";
 
@@ -49,17 +49,18 @@ export default function CreateProjectPage() {
 
       formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
+      formDataToSend.append("excerpt", formData.description.substring(0, 200));
       formDataToSend.append("technologies", formData.technologies);
       formDataToSend.append("liveUrl", formData.liveUrl);
       formDataToSend.append("githubUrl", formData.githubUrl);
       formDataToSend.append("featured", String(formData.featured));
+      formDataToSend.append("status", "active");
 
       if (projectImageFile) {
         formDataToSend.append("file", projectImageFile);
       }
 
       const result = await createProject(formDataToSend);
-      console.log(result);
 
       if (result?.success) {
         toast.success("Project created successfully! 🎉");
@@ -68,7 +69,6 @@ export default function CreateProjectPage() {
         toast.error(result?.error || "Failed to create project");
       }
     } catch (error) {
-      console.error("Error creating project:", error);
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -78,7 +78,7 @@ export default function CreateProjectPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
+
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold">
@@ -101,11 +101,11 @@ export default function CreateProjectPage() {
           </Link>
         </div>
 
-        {/* Form */}
+
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
           <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
             <div className="grid gap-6">
-              {/* Title */}
+
               <div>
                 <label
                   htmlFor="title"
@@ -125,7 +125,7 @@ export default function CreateProjectPage() {
                 />
               </div>
 
-              {/* Description */}
+
               <div>
                 <label
                   htmlFor="description"
@@ -145,9 +145,9 @@ export default function CreateProjectPage() {
                 />
               </div>
 
-              {/* Technologies and Project Image Row */}
+
               <div className="grid md:grid-cols-2 gap-6">
-                {/* Technologies */}
+
                 <div>
                   <label
                     htmlFor="technologies"
@@ -181,9 +181,9 @@ export default function CreateProjectPage() {
                 </div>
               </div>
 
-              {/* URLs Row */}
+
               <div className="grid md:grid-cols-2 gap-6">
-                {/* Live URL */}
+
                 <div>
                   <label
                     htmlFor="liveUrl"
@@ -198,11 +198,11 @@ export default function CreateProjectPage() {
                     value={formData.liveUrl}
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://your-project.com"
+                    placeholder="https://example.com"
                   />
                 </div>
 
-                {/* GitHub URL */}
+
                 <div>
                   <label
                     htmlFor="githubUrl"
@@ -217,12 +217,12 @@ export default function CreateProjectPage() {
                     value={formData.githubUrl}
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://github.com/username/repository"
+                    placeholder="https://example.com"
                   />
                 </div>
               </div>
 
-              {/* Featured Checkbox */}
+
               <div className="flex items-center">
                 <input
                   type="checkbox"
@@ -240,7 +240,7 @@ export default function CreateProjectPage() {
                 </label>
               </div>
 
-              {/* Action Buttons */}
+
               <div className="flex gap-4 pt-6 border-t border-gray-700">
                 <button
                   type="submit"

@@ -1,31 +1,12 @@
-import { getBlogById } from "@/actions/createApi";
+import { getBlogById, getBlogs } from "@/actions/blogApi";
+import { BlogPost, DynamicPageProps } from "@/interfaces";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
-interface Blog {
-  id: string;
-  title: string;
-  slug: string;
-  content: string;
-  excerpt?: string;
-  coverImage?: string;
-  tags: string[];
-  published: boolean;
-  createdAt: string;
-  updatedAt: string;
-  author: {
-    id: string;
-    name: string;
-    email: string;
-  };
-  authorId: string;
-}
+export const revalidate = 60;
 
-interface BlogDetailPageProps {
-  params: Promise<{ id: string }>;
-}
-
-async function getBlogByIdWithApi(id: string): Promise<Blog | null> {
+async function getBlogByIdWithApi(id: string): Promise<BlogPost | null> {
   try {
     const blog = await getBlogById(id);
     return blog;
@@ -35,7 +16,20 @@ async function getBlogByIdWithApi(id: string): Promise<Blog | null> {
   }
 }
 
-export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
+export async function generateStaticParams() {
+  try {
+    const blogs = await getBlogs();
+
+    return blogs.map((blog: BlogPost) => ({
+      id: blog.id,
+    }));
+  } catch (error) {
+    console.error("Error generating static params for blogs:", error);
+    return [];
+  }
+}
+
+export default async function BlogDetailView({ params }: DynamicPageProps) {
   const { id } = await params;
 
   const blog = await getBlogByIdWithApi(id);
@@ -52,19 +46,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             href="/blogs"
             className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors"
           >
-            <svg
-              className="w-4 h-4 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
+            <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Blogs
           </Link>
         </div>
