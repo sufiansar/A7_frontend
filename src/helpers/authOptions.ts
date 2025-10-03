@@ -9,18 +9,21 @@ declare module "next-auth" {
       email?: string | null;
       image?: string | null;
     };
+    accessToken?: string;
   }
   interface User {
     id: string;
     name?: string | null;
     email?: string | null;
     image?: string | null;
+    accessToken?: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     id?: string;
+    accessToken?: string;
   }
 }
 
@@ -61,7 +64,7 @@ export const authOptions: NextAuthOptions = {
           const response = await res.json();
           console.log("User response:", response);
 
-          // Handle your actual API response format: { data: { user: {...} } }
+          // Handle your actual API response format: { data: { user: {...}, accessToken: ... } }
           if (response?.data?.user?.id) {
             const user = response.data.user;
             return {
@@ -69,6 +72,7 @@ export const authOptions: NextAuthOptions = {
               name: user.name,
               email: user.email,
               image: user.picture || null,
+              accessToken: response.data.accessToken,
             };
           }
 
@@ -91,6 +95,7 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name;
         token.email = user.email;
         token.picture = user.image;
+        token.accessToken = (user as any).accessToken;
       }
       return token;
     },
@@ -100,6 +105,7 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.image = token.picture;
+        session.accessToken = token.accessToken as string;
       }
       return session;
     },

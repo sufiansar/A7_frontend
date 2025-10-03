@@ -131,6 +131,7 @@ export default function ImageUpload({
               className="w-full h-full object-cover rounded-md"
             />
             <Button
+              type="button"
               onClick={handleRemove}
               size="icon"
               className="absolute -top-2 -right-2 size-6 rounded-full border-2 border-gray-900 bg-red-600 hover:bg-red-700 shadow-lg"
@@ -140,6 +141,7 @@ export default function ImageUpload({
             </Button>
             <div className="absolute bottom-2 left-2 right-2">
               <Button
+                type="button"
                 variant="outline"
                 size="sm"
                 onClick={openFileDialog}
@@ -165,6 +167,7 @@ export default function ImageUpload({
               PNG, JPG, GIF or WebP (max. {maxSizeMB}MB)
             </p>
             <Button
+              type="button"
               variant="outline"
               size="sm"
               onClick={openFileDialog}

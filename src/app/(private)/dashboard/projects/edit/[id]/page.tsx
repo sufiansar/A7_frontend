@@ -1,14 +1,25 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { createProject } from "@/actions/createApi";
+import { getProjectById, updateProject } from "@/actions/createApi";
 import ImageUpload from "@/components/ImageUpload";
-import { ArrowLeft, Plus, Loader2 } from "lucide-react";
+import { ArrowLeft, Check, Loader2 } from "lucide-react";
 
-export default function CreateProjectPage() {
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  technologies: string[];
+  liveUrl?: string;
+  githubUrl?: string;
+  imageUrl?: string;
+  featured: boolean;
+}
+
+export default function EditProjectPage() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -18,8 +29,46 @@ export default function CreateProjectPage() {
     featured: false,
   });
   const [projectImageFile, setProjectImageFile] = useState<File | null>(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const router = useRouter();
+  const params = useParams();
+  const projectId = params.id as string;
+
+  useEffect(() => {
+    if (projectId) {
+      fetchProject();
+    }
+  }, [projectId]);
+
+  const fetchProject = async () => {
+    try {
+      const project = await getProjectById(projectId);
+
+      if (project) {
+        setFormData({
+          title: project.title || "",
+          description: project.description || "",
+          technologies: Array.isArray(project.technologies)
+            ? project.technologies.join(", ")
+            : "",
+          liveUrl: project.liveUrl || "",
+          githubUrl: project.githubUrl || "",
+          featured: project.featured || false,
+        });
+        setCurrentImageUrl(project.imageUrl || "");
+      } else {
+        toast.error("Project not found");
+        router.push("/dashboard/projects");
+      }
+    } catch (error) {
+      console.error("Error fetching project:", error);
+      toast.error("Failed to load project");
+    } finally {
+      setInitialLoading(false);
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -53,27 +102,35 @@ export default function CreateProjectPage() {
       formDataToSend.append("liveUrl", formData.liveUrl);
       formDataToSend.append("githubUrl", formData.githubUrl);
       formDataToSend.append("featured", String(formData.featured));
+      formDataToSend.append("imageUrl", currentImageUrl);
 
       if (projectImageFile) {
-        formDataToSend.append("file", projectImageFile);
+        formDataToSend.append("imageFile", projectImageFile);
       }
 
-      const result = await createProject(formDataToSend);
-      console.log(result);
+      const result = await updateProject(projectId, formDataToSend);
 
-      if (result?.success) {
-        toast.success("Project created successfully! 🎉");
+      if (result?.success !== false) {
+        toast.success("Project updated successfully! 🎉");
         router.push("/dashboard/projects");
       } else {
-        toast.error(result?.error || "Failed to create project");
+        toast.error(result?.error || "Failed to update project");
       }
     } catch (error) {
-      console.error("Error creating project:", error);
+      console.error("Error updating project:", error);
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
   };
+
+  if (initialLoading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white text-lg">Loading project...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -82,14 +139,12 @@ export default function CreateProjectPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold">
-              Create{" "}
+              Edit{" "}
               <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                New Project
+                Project
               </span>
             </h1>
-            <p className="text-gray-400 mt-2">
-              Showcase your work and projects
-            </p>
+            <p className="text-gray-400 mt-2">Update your project details</p>
           </div>
 
           <Link
@@ -170,12 +225,14 @@ export default function CreateProjectPage() {
                   </p>
                 </div>
 
+                {/* Project Image */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Project Image
                   </label>
                   <ImageUpload
                     onImageChange={setProjectImageFile}
+                    initialImage={currentImageUrl}
                     className="w-full"
                   />
                 </div>
@@ -250,12 +307,12 @@ export default function CreateProjectPage() {
                   {loading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Creating...
+                      Updating...
                     </>
                   ) : (
                     <>
-                      <Plus className="w-5 h-5" />
-                      Create Project
+                      <Check className="w-5 h-5" />
+                      Update Project
                     </>
                   )}
                 </button>
