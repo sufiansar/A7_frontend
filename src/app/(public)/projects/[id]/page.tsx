@@ -4,8 +4,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Github, ExternalLink } from "lucide-react";
 
-export const revalidate = 60;
-
 async function getProjectByIdWithApi(id: string): Promise<ProjectItem | null> {
   try {
     const project = await getProjectById(id);

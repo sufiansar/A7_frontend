@@ -8,7 +8,7 @@ export const getProjectsPublic = async () => {
     }
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/projects`, {
-      next: { tags: ["projects"], revalidate: 60 },
+      next: { tags: ["projects"] },
     });
 
     if (!res.ok) {
@@ -49,7 +49,7 @@ export const getProjectById = async (id: string) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/projects/${id}`,
       {
-        next: { tags: ["projects", `project-${id}`], revalidate: 60 },
+        next: { tags: ["projects", `project-${id}`] },
       }
     );
 

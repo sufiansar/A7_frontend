@@ -7,7 +7,7 @@ export const getSkillsPublic = async () => {
     }
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/skills`, {
-      next: { tags: ["skills"], revalidate: 60 },
+      next: { tags: ["skills"] },
     });
 
     if (!res.ok) {

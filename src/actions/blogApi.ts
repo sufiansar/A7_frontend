@@ -8,7 +8,7 @@ export const getBlogsPublic = async () => {
     }
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blogs`, {
-      next: { tags: ["blogs"], revalidate: 60 },
+      next: { tags: ["blogs"] },
     });
 
     if (!res.ok) {
@@ -51,7 +51,7 @@ export const getBlogById = async (id: string) => {
     }
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blogs/${id}`, {
-      next: { tags: ["blogs", `blog-${id}`], revalidate: 60 },
+      next: { tags: ["blogs", `blog-${id}`] },
     });
 
     if (!res.ok) {

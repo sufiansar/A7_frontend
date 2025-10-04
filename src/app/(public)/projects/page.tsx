@@ -4,8 +4,6 @@ import { getProjectsPublic } from "@/actions/projectApi";
 import { ProjectItem } from "@/interfaces";
 import { Github, ExternalLink } from "lucide-react";
 
-export const revalidate = 60;
-
 export default async function ProjectShowcase() {
   const projects = await getProjectsPublic();
 

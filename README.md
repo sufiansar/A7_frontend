@@ -20,24 +20,28 @@
 ## ✨ Features
 
 ### 🎨 **Modern Design**
+
 - Clean, professional dark theme with gradient accents
 - Responsive design that works on all devices
 - Smooth animations and transitions
 - Interactive UI components
 
 ### 📝 **Content Management**
+
 - **Blog System**: Write and manage blog posts with rich content
 - **Project Showcase**: Display projects with live demos and GitHub links
 - **Skills Display**: Showcase technical skills with proficiency levels
 - **About Section**: Personal information and professional journey
 
 ### 🔐 **Authentication & Admin**
+
 - Secure authentication with NextAuth.js
 - Protected admin dashboard
 - Role-based access control
 - Profile management
 
 ### 🛠 **Developer Experience**
+
 - **TypeScript**: Full type safety throughout the application
 - **Modern React**: Latest React 19 with hooks and functional components
 - **Form Handling**: React Hook Form with Zod validation
@@ -49,6 +53,7 @@
 ## 🏗 Architecture
 
 ### **Project Structure**
+
 ```
 src/
 ├── app/                    # Next.js App Router
@@ -69,23 +74,27 @@ src/
 ### **Key Technologies**
 
 #### **Frontend Stack**
+
 - **Next.js 15** - React framework with App Router
 - **React 19** - Latest React with concurrent features
 - **TypeScript** - Type-safe JavaScript
 - **Tailwind CSS 4** - Utility-first CSS framework
 
 #### **UI & Styling**
+
 - **Radix UI** - Headless UI components
 - **Lucide React** - Beautiful icon library
 - **Framer Motion** - Smooth animations
 - **React Hot Toast** - Notification system
 
 #### **Forms & Validation**
+
 - **React Hook Form** - Performant forms with easy validation
 - **Zod** - TypeScript-first schema validation
 - **@hookform/resolvers** - Form validation resolvers
 
 #### **Authentication**
+
 - **NextAuth.js** - Authentication for Next.js
 - **JWT** - Secure token-based authentication
 
@@ -94,36 +103,41 @@ src/
 ## 🚀 Quick Start
 
 ### **Prerequisites**
-- Node.js 18+ 
+
+- Node.js 18+
 - npm, yarn, pnpm, or bun
 - Git
 
 ### **Installation**
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/sufiansar/A7_frontend.git
    cd A7_frontend
    ```
 
 2. **Install dependencies**
+
    ```bash
    # Using bun (recommended)
    bun install
-   
+
    # Or using npm
    npm install
-   
+
    # Or using yarn
    yarn install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env.local
    ```
-   
+
    Fill in your environment variables:
+
    ```env
    NEXTAUTH_URL=http://localhost:3000
    NEXTAUTH_SECRET=your-secret-key
@@ -131,6 +145,7 @@ src/
    ```
 
 4. **Run the development server**
+
    ```bash
    bun dev
    # or
@@ -147,6 +162,7 @@ src/
 ## 📖 Usage
 
 ### **Public Pages**
+
 - **Home** (`/`) - Hero section with featured content
 - **About** (`/about`) - Personal information and background
 - **Projects** (`/projects`) - Portfolio of projects
@@ -155,6 +171,7 @@ src/
 - **Skills** (`/skills`) - Technical skills showcase
 
 ### **Admin Dashboard** (Protected)
+
 - **Dashboard** (`/dashboard`) - Overview and analytics
 - **Manage Posts** (`/dashboard/blogs`) - Create and edit blog posts
 - **Manage Projects** (`/dashboard/projects`) - Add and update projects
@@ -162,6 +179,7 @@ src/
 - **Profile** (`/dashboard/profile`) - Edit personal information
 
 ### **Authentication**
+
 - **Login** (`/login`) - Secure admin access
 - Automatic redirect to dashboard after successful login
 - Session management with NextAuth.js
@@ -171,14 +189,18 @@ src/
 ## 🎨 Customization
 
 ### **Styling**
+
 The project uses Tailwind CSS with a custom dark theme. Main colors:
+
 - **Primary**: Blue gradient (`from-blue-400 to-purple-500`)
 - **Background**: Dark grays (`gray-900`, `gray-800`)
 - **Text**: White and gray variations
 - **Accents**: Blue and purple gradients
 
 ### **Components**
+
 All UI components are built with Radix UI and styled with Tailwind CSS:
+
 - Form components with validation
 - Interactive cards and buttons
 - Responsive navigation
@@ -186,6 +208,7 @@ All UI components are built with Radix UI and styled with Tailwind CSS:
 - Data tables
 
 ### **Content**
+
 - Blog posts support markdown content
 - Projects can include live demos and GitHub links
 - Skills can have custom icons and proficiency levels
@@ -212,6 +235,7 @@ yarn dev             # Development with yarn
 ## 📦 Dependencies
 
 ### **Core Dependencies**
+
 - `next` - React framework
 - `react` & `react-dom` - React library
 - `typescript` - Type safety
@@ -219,17 +243,20 @@ yarn dev             # Development with yarn
 - `axios` - HTTP client
 
 ### **UI & Styling**
+
 - `@radix-ui/*` - Headless UI components
 - `tailwindcss` - CSS framework
 - `lucide-react` - Icons
 - `clsx` - Conditional classes
 
 ### **Forms & Validation**
+
 - `react-hook-form` - Form handling
 - `zod` - Schema validation
 - `@hookform/resolvers` - Form resolvers
 
 ### **Utilities**
+
 - `next-themes` - Theme management
 - `react-hot-toast` - Notifications
 - `class-variance-authority` - Component variants
@@ -239,6 +266,7 @@ yarn dev             # Development with yarn
 ## 🌐 Deployment
 
 ### **Vercel (Recommended)**
+
 1. Push your code to GitHub
 2. Connect your repository to [Vercel](https://vercel.com)
 3. Configure environment variables
@@ -247,7 +275,9 @@ yarn dev             # Development with yarn
 **🌐 Live Site**: [https://portfolio-frontend-five-psi.vercel.app/](https://portfolio-frontend-five-psi.vercel.app/)
 
 ### **Other Platforms**
+
 The project can be deployed on any platform that supports Node.js:
+
 - Netlify
 - Railway
 - Heroku
@@ -261,6 +291,7 @@ The project can be deployed on any platform that supports Node.js:
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ### **Development Workflow**
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
@@ -268,6 +299,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 5. Open a Pull Request
 
 ### **Code Style**
+
 - Use TypeScript for all new code
 - Follow the existing code style
 - Run `bun lint` before committing
@@ -284,6 +316,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 Author
 
 **Sufian Sar**
+
 - GitHub: [@sufiansar](https://github.com/sufiansar)
 - Email: [sufiancodecrush@gmail.com](mailto:sufiancodecrush@gmail.com)
 

@@ -4,8 +4,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export const revalidate = 60;
-
 async function getBlogByIdWithApi(id: string): Promise<BlogPost | null> {
   try {
     const blog = await getBlogById(id);

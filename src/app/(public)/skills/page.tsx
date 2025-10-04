@@ -2,8 +2,6 @@ import { getSkillsPublic } from "@/actions/skillApi";
 import { SkillItem } from "@/interfaces";
 import Image from "next/image";
 
-export const revalidate = 60;
-
 export default async function SkillsShowcase() {
   const skillsData = await getSkillsPublic();
   const skills = Array.isArray(skillsData) ? skillsData : [];

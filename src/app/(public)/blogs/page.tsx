@@ -3,8 +3,6 @@ import Image from "next/image";
 import { getBlogsPublic } from "@/actions/blogApi";
 import { BlogPost } from "@/interfaces";
 
-export const revalidate = 60;
-
 export default async function BlogShowcase() {
   const blogs = await getBlogsPublic();
 
