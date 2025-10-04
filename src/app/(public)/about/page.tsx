@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { timelineData } from "@/helpers/timeline";
 
 const About = () => {
   return (
@@ -186,6 +188,55 @@ const About = () => {
               I&apos;m excited to apply my knowledge in real-world projects and
               contribute to meaningful software solutions.
             </p>
+          </div>
+        </div>
+
+        {/* Timeline Section */}
+        <div className="mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">
+              My{" "}
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Journey
+              </span>
+            </h2>
+            <p className="text-gray-400">
+              A timeline of my learning and development journey
+            </p>
+          </div>
+
+          <div className="relative max-w-4xl mx-auto">
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-purple-500 to-pink-500"></div>
+
+            <div className="space-y-12">
+              {timelineData.map((item, index) => (
+                <div key={index} className="relative flex items-center">
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full border-4 border-gray-900 z-10"></div>
+
+                  <div
+                    className={`w-5/12 ${
+                      item.side === "right" ? "ml-auto" : ""
+                    }`}
+                  >
+                    <Card className="bg-white/5 backdrop-blur-sm border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
+                      <CardContent className="p-6">
+                        <div className="flex items-center space-x-3 mb-3">
+                          <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                            {item.year}
+                          </span>
+                        </div>
+                        <h3 className="text-white font-semibold text-lg mb-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-300 text-sm leading-relaxed">
+                          {item.description}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

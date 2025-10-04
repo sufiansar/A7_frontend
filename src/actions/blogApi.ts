@@ -16,7 +16,7 @@ export const getBlogsPublic = async () => {
 
     const data = await res.json();
     return data?.data || [];
-  } catch (error) {
+  } catch {
     return [];
   }
 };
@@ -38,7 +38,7 @@ export const getBlogs = async () => {
     }
 
     return [];
-  } catch (error) {
+  } catch {
     return [];
   }
 };
@@ -59,7 +59,7 @@ export const getBlogById = async (id: string) => {
 
     const data = await res.json();
     return data?.data || null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

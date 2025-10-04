@@ -16,7 +16,7 @@ export const getProjectsPublic = async () => {
 
     const data = await res.json();
     return data?.data || [];
-  } catch (error) {
+  } catch {
     return [];
   }
 };
@@ -34,7 +34,7 @@ export const getProjects = async () => {
     );
 
     return ok ? result?.data || [] : [];
-  } catch (error) {
+  } catch {
     return [];
   }
 };
@@ -58,7 +58,7 @@ export const getProjectById = async (id: string) => {
 
     const data = await res.json();
     return data?.data || null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

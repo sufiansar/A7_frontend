@@ -12,7 +12,7 @@ export default async function ProjectShowcase() {
   if (!projects || projects.length === 0) {
     return (
       <div className="min-h-screen bg-gray-900">
-        <div className="max-w-7xl mx-auto py-20 px-6">
+        <div className="max-w-7xl mx-auto py-26 px-6">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
               All{" "}

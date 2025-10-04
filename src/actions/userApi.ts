@@ -101,7 +101,7 @@ export const updateUserProfile = async (profileData: FormData) => {
 
 export const getUserProfile = async () => {
   try {
-    const { headers, session } = await getAuthHeaders();
+    const { headers } = await getAuthHeaders();
 
     const { ok, data: result } = await makeApiCall(
       `${process.env.NEXT_PUBLIC_BASE_API}/user/me`,

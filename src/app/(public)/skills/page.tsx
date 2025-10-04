@@ -11,7 +11,7 @@ export default async function SkillsShowcase() {
   if (!skills || skills.length === 0) {
     return (
       <div className="min-h-screen bg-gray-900">
-        <div className="max-w-7xl mx-auto py-20 px-6">
+        <div className="max-w-7xl mx-auto py-26 px-6">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
               My{" "}
@@ -35,7 +35,6 @@ export default async function SkillsShowcase() {
   return (
     <div className="min-h-screen bg-gray-900">
       <div className="max-w-7xl mx-auto py-26 px-6">
-
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
             My{" "}
@@ -49,14 +48,12 @@ export default async function SkillsShowcase() {
           </p>
         </div>
 
-
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {skills.map((skill: SkillItem) => (
             <div
               key={skill.id}
               className="group bg-gray-800 rounded-2xl p-6 border border-gray-700 hover:border-blue-500 transition-all duration-300 hover:transform hover:scale-105"
             >
-
               <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl">
                 {skill.iconUrl ? (
                   <Image
@@ -75,11 +72,9 @@ export default async function SkillsShowcase() {
                 )}
               </div>
 
-
               <h3 className="text-xl font-bold text-white text-center mb-2 group-hover:text-blue-400 transition-colors">
                 {skill.name}
               </h3>
-
 
               {skill.level && (
                 <div className="text-center">
@@ -99,12 +94,10 @@ export default async function SkillsShowcase() {
                 </div>
               )}
 
-
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
             </div>
           ))}
         </div>
-
 
         <div className="mt-20 text-center">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">

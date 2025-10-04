@@ -17,7 +17,6 @@ import { NavSecondary } from "@/components/nav-secondary";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,

@@ -5,7 +5,6 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { getSkills, deleteSkill } from "@/actions/skillApi";
 import { SkillItem } from "@/interfaces";
-import { useRouter } from "next/navigation";
 import {
   Plus,
   Zap,
@@ -14,6 +13,7 @@ import {
   Loader2,
   X,
   AlertTriangle,
+  ArrowLeft,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -23,7 +23,6 @@ export default function SkillsManagementDashboard() {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [skillToDelete, setSkillToDelete] = useState<SkillItem | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     fetchSkills();
@@ -34,7 +33,7 @@ export default function SkillsManagementDashboard() {
       setLoading(true);
       const data = await getSkills();
       setSkills(data || []);
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch skills");
     } finally {
       setLoading(false);
@@ -55,13 +54,13 @@ export default function SkillsManagementDashboard() {
 
       if (result.success) {
         toast.success("Skill deleted successfully!");
-        await fetchSkills(); 
+        await fetchSkills();
         setDeleteModalOpen(false);
         setSkillToDelete(null);
       } else {
         toast.error(result.error || "Failed to delete skill");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete skill");
     } finally {
       setDeleting(false);
@@ -84,14 +83,22 @@ export default function SkillsManagementDashboard() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
-
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">
-            Manage{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Skills
-            </span>
-          </h1>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/dashboard"
+              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </Link>
+            <h1 className="text-3xl font-bold">
+              Manage{" "}
+              <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                Skills
+              </span>
+            </h1>
+          </div>
 
           <Link
             href="/dashboard/skills/create"
@@ -101,7 +108,6 @@ export default function SkillsManagementDashboard() {
             Add New Skill
           </Link>
         </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
@@ -165,7 +171,6 @@ export default function SkillsManagementDashboard() {
           </div>
         </div>
 
-
         {skills.length === 0 ? (
           <div className="text-center py-16">
             <Zap className="w-16 h-16 text-gray-600 mx-auto mb-4" />
@@ -190,7 +195,6 @@ export default function SkillsManagementDashboard() {
                 key={skill.id}
                 className="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-blue-500 transition-colors"
               >
-
                 <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl">
                   {skill.iconUrl ? (
                     <Image
@@ -208,7 +212,6 @@ export default function SkillsManagementDashboard() {
                     </div>
                   )}
                 </div>
-
 
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-semibold text-white mb-2">
@@ -232,7 +235,6 @@ export default function SkillsManagementDashboard() {
                   )}
                 </div>
 
-
                 <div className="flex gap-2">
                   <Link
                     href={`/dashboard/skills/edit/${skill.id}`}
@@ -249,7 +251,6 @@ export default function SkillsManagementDashboard() {
                   </button>
                 </div>
 
-
                 <div className="mt-4 pt-4 border-t border-gray-700">
                   <p className="text-xs text-gray-500">
                     Created: {new Date(skill.createdAt).toLocaleDateString()}
@@ -260,7 +261,6 @@ export default function SkillsManagementDashboard() {
           </div>
         )}
       </div>
-
 
       {deleteModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

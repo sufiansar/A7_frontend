@@ -11,12 +11,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu, X, LogOut, User } from "lucide-react";
+import { Menu, LogOut, User } from "lucide-react";
 import { Logo } from "./logo";
 
 const Navbar = () => {
   const pathname = usePathname();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const publicNavItems = [
     { name: "Home", href: "/" },

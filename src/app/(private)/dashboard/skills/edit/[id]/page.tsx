@@ -8,6 +8,10 @@ import { updateSkill } from "@/actions/skillApi";
 import { SkillItem, DynamicPageProps } from "@/interfaces";
 import { ArrowLeft, Save, Upload, X } from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function EditSkillForm({ params }: DynamicPageProps) {
   const { id } = use(params);
@@ -25,9 +29,11 @@ export default function EditSkillForm({ params }: DynamicPageProps) {
         const { getSkills } = await import("@/actions/skillApi");
         const allSkills = await getSkills();
 
-        const skillData = allSkills?.find((skill: any) => {
-          return skill._id === id || skill.id === id;
-        });
+        const skillData = allSkills?.find(
+          (skill: { _id?: string; id?: string }) => {
+            return skill._id === id || skill.id === id;
+          }
+        );
 
         if (skillData) {
           setSkill(skillData);
@@ -36,7 +42,7 @@ export default function EditSkillForm({ params }: DynamicPageProps) {
           toast.error("Skill not found");
           router.push("/dashboard/skills");
         }
-      } catch (error) {
+      } catch {
         toast.error("Failed to fetch skill");
         router.push("/dashboard/skills");
       } finally {
@@ -66,7 +72,7 @@ export default function EditSkillForm({ params }: DynamicPageProps) {
         toast.success("Skill updated successfully!");
         router.push("/dashboard/skills");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to update skill");
     } finally {
       setUpdating(false);
@@ -111,14 +117,16 @@ export default function EditSkillForm({ params }: DynamicPageProps) {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
-
         <div className="flex items-center gap-4 mb-8">
-          <Link
-            href="/dashboard/skills"
-            className="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors"
+          <Button
+            variant="ghost"
+            asChild
+            className="p-2 text-gray-400 hover:text-white"
           >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
+            <Link href="/dashboard/skills">
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+          </Button>
           <h1 className="text-3xl font-bold">
             Edit{" "}
             <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
@@ -127,159 +135,151 @@ export default function EditSkillForm({ params }: DynamicPageProps) {
           </h1>
         </div>
 
+        <Card className="max-w-2xl mx-auto bg-gray-800 border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-white">Edit Skill Information</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-gray-300">
+                  Skill Name *
+                </Label>
+                <Input
+                  id="name"
+                  name="name"
+                  required
+                  defaultValue={skill.name}
+                  placeholder="e.g., React, Node.js, Python"
+                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                />
+              </div>
 
-        <div className="max-w-2xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="level" className="text-gray-300">
+                  Skill Level
+                </Label>
+                <select
+                  id="level"
+                  name="level"
+                  defaultValue={skill.level || ""}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select level (optional)</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                  <option value="Expert">Expert</option>
+                </select>
+              </div>
 
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-300 mb-2"
-              >
-                Skill Name *
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                defaultValue={skill.name}
-                placeholder="e.g., React, Node.js, Python"
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400"
-              />
-            </div>
-
-
-            <div>
-              <label
-                htmlFor="level"
-                className="block text-sm font-medium text-gray-300 mb-2"
-              >
-                Skill Level
-              </label>
-              <select
-                id="level"
-                name="level"
-                defaultValue={skill.level || ""}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white"
-              >
-                <option value="">Select level (optional)</option>
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-                <option value="Expert">Expert</option>
-              </select>
-            </div>
-
-
-            <div>
-              <label
-                htmlFor="iconFile"
-                className="block text-sm font-medium text-gray-300 mb-2"
-              >
-                Skill Icon
-              </label>
-              <div className="space-y-4">
-
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="iconFile"
-                    className="cursor-pointer bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg px-4 py-3 flex items-center gap-2 transition-colors"
-                  >
-                    <Upload className="w-5 h-5 text-blue-400" />
-                    <span className="text-gray-300">Change Icon</span>
-                  </label>
-                  <input
-                    type="file"
-                    id="iconFile"
-                    name="file"
-                    accept="image/*"
-                    onChange={handleIconChange}
-                    className="hidden"
-                  />
-                  {previewIcon && previewIcon !== skill.iconUrl && (
-                    <button
-                      type="button"
-                      onClick={clearPreview}
-                      className="p-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors"
+              <div className="space-y-2">
+                <Label htmlFor="iconFile" className="text-gray-300">
+                  Skill Icon
+                </Label>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <Label
+                      htmlFor="iconFile"
+                      className="cursor-pointer bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg px-4 py-3 flex items-center gap-2 transition-colors"
                     >
-                      <X className="w-4 h-4" />
-                    </button>
+                      <Upload className="w-5 h-5 text-blue-400" />
+                      <span className="text-gray-300">Change Icon</span>
+                    </Label>
+                    <input
+                      type="file"
+                      id="iconFile"
+                      name="file"
+                      accept="image/*"
+                      onChange={handleIconChange}
+                      className="hidden"
+                    />
+                    {previewIcon && previewIcon !== skill.iconUrl && (
+                      <Button
+                        type="button"
+                        onClick={clearPreview}
+                        variant="destructive"
+                        size="sm"
+                        className="p-2"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
+
+                  {previewIcon && (
+                    <div className="bg-gray-700 border border-gray-600 rounded-lg p-4">
+                      <p className="text-sm text-gray-300 mb-2">
+                        {previewIcon === skill.iconUrl
+                          ? "Current Icon:"
+                          : "New Icon Preview:"}
+                      </p>
+                      <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl">
+                        <Image
+                          src={previewIcon}
+                          alt="Icon preview"
+                          width={40}
+                          height={40}
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
                   )}
+
+                  <p className="text-sm text-gray-400">
+                    Upload a new icon for your skill (PNG, JPG, SVG
+                    recommended). Max size: 5MB
+                  </p>
                 </div>
+              </div>
 
-
-                {previewIcon && (
-                  <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                    <p className="text-sm text-gray-300 mb-2">
-                      {previewIcon === skill.iconUrl
-                        ? "Current Icon:"
-                        : "New Icon Preview:"}
-                    </p>
-                    <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl">
-                      <Image
-                        src={previewIcon}
-                        alt="Icon preview"
-                        width={40}
-                        height={40}
-                        className="object-contain"
-                      />
+              <Card className="bg-gray-700 border-gray-600">
+                <CardContent className="p-4">
+                  <h3 className="text-sm font-medium text-gray-300 mb-2">
+                    Skill Information
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-400">
+                    <div>
+                      <span className="font-medium">Created:</span>{" "}
+                      {new Date(skill.createdAt).toLocaleDateString()}
+                    </div>
+                    <div>
+                      <span className="font-medium">Last Updated:</span>{" "}
+                      {new Date(skill.updatedAt).toLocaleDateString()}
                     </div>
                   </div>
-                )}
+                </CardContent>
+              </Card>
 
-                <p className="text-sm text-gray-400">
-                  Upload a new icon for your skill (PNG, JPG, SVG recommended).
-                  Max size: 5MB
-                </p>
+              <div className="flex gap-4 pt-6">
+                <Button
+                  variant="outline"
+                  asChild
+                  className="flex-1 bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
+                >
+                  <Link href="/dashboard/skills">Cancel</Link>
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={updating}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  {updating ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                      Updating...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-5 h-5 mr-2" />
+                      Update Skill
+                    </>
+                  )}
+                </Button>
               </div>
-            </div>
-
-
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-              <h3 className="text-sm font-medium text-gray-300 mb-2">
-                Skill Information
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-400">
-                <div>
-                  <span className="font-medium">Created:</span>{" "}
-                  {new Date(skill.createdAt).toLocaleDateString()}
-                </div>
-                <div>
-                  <span className="font-medium">Last Updated:</span>{" "}
-                  {new Date(skill.updatedAt).toLocaleDateString()}
-                </div>
-              </div>
-            </div>
-
-
-            <div className="flex gap-4 pt-6">
-              <Link
-                href="/dashboard/skills"
-                className="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 px-6 rounded-lg transition-colors text-center"
-              >
-                Cancel
-              </Link>
-              <button
-                type="submit"
-                disabled={updating}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
-              >
-                {updating ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Updating...
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-5 h-5" />
-                    Update Skill
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
-        </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

@@ -7,17 +7,12 @@ import toast from "react-hot-toast";
 import { getProjectById, updateProject } from "@/actions/projectApi";
 import ImageUpload from "@/components/ImageUpload";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
-
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  technologies: string[];
-  liveUrl?: string;
-  githubUrl?: string;
-  imageUrl?: string;
-  featured: boolean;
-}
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function EditProjectPage() {
   const [formData, setFormData] = useState({
@@ -117,7 +112,7 @@ export default function EditProjectPage() {
       } else {
         toast.error(result?.error || "Failed to update project");
       }
-    } catch (error) {
+    } catch {
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
@@ -135,9 +130,18 @@ export default function EditProjectPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
-
         <div className="flex items-center justify-between mb-8">
           <div>
+            <Button
+              variant="ghost"
+              asChild
+              className="mb-4 text-gray-400 hover:text-white p-0"
+            >
+              <Link href="/dashboard/projects">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Projects
+              </Link>
+            </Button>
             <h1 className="text-3xl font-bold">
               Edit{" "}
               <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
@@ -146,90 +150,66 @@ export default function EditProjectPage() {
             </h1>
             <p className="text-gray-400 mt-2">Update your project details</p>
           </div>
-
-          <Link
-            href="/dashboard/projects"
-            className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors flex items-center gap-2"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Back to Projects
-          </Link>
         </div>
 
-
-        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <div className="grid gap-6">
-
-              <div>
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
+        <Card className="max-w-4xl mx-auto bg-gray-800 border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-white">Project Information</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="title" className="text-gray-300">
                   Project Title *
-                </label>
-                <input
-                  type="text"
+                </Label>
+                <Input
                   id="title"
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                   placeholder="Enter project title..."
                 />
               </div>
 
-
-              <div>
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
+              <div className="space-y-2">
+                <Label htmlFor="description" className="text-gray-300">
                   Description *
-                </label>
-                <textarea
+                </Label>
+                <Textarea
                   id="description"
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
                   required
                   rows={4}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 resize-none"
                   placeholder="Describe your project..."
                 />
               </div>
 
-
               <div className="grid md:grid-cols-2 gap-6">
-
-                <div>
-                  <label
-                    htmlFor="technologies"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
+                <div className="space-y-2">
+                  <Label htmlFor="technologies" className="text-gray-300">
                     Technologies *
-                  </label>
-                  <input
-                    type="text"
+                  </Label>
+                  <Input
                     id="technologies"
                     name="technologies"
                     value={formData.technologies}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                     placeholder="React, Node.js, MongoDB"
                   />
-                  <p className="text-gray-400 text-sm mt-1">
+                  <p className="text-gray-400 text-sm">
                     Separate technologies with commas
                   </p>
                 </div>
 
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Project Image
-                  </label>
+                <div className="space-y-2">
+                  <Label className="text-gray-300">Project Image</Label>
                   <ImageUpload
                     onImageChange={setProjectImageFile}
                     initialImage={currentImageUrl}
@@ -238,95 +218,85 @@ export default function EditProjectPage() {
                 </div>
               </div>
 
-
               <div className="grid md:grid-cols-2 gap-6">
-
-                <div>
-                  <label
-                    htmlFor="liveUrl"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
+                <div className="space-y-2">
+                  <Label htmlFor="liveUrl" className="text-gray-300">
                     Live URL
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="url"
                     id="liveUrl"
                     name="liveUrl"
                     value={formData.liveUrl}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                     placeholder="https://example.com"
                   />
                 </div>
 
-
-                <div>
-                  <label
-                    htmlFor="githubUrl"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
+                <div className="space-y-2">
+                  <Label htmlFor="githubUrl" className="text-gray-300">
                     GitHub URL
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="url"
                     id="githubUrl"
                     name="githubUrl"
                     value={formData.githubUrl}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://example.com"
+                    className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                    placeholder="https://github.com/username/repo"
                   />
                 </div>
               </div>
 
-
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
+              <div className="flex items-center space-x-2">
+                <Checkbox
                   id="featured"
-                  name="featured"
                   checked={formData.featured}
-                  onChange={handleChange}
-                  className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+                  onCheckedChange={(checked) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      featured: checked as boolean,
+                    }))
+                  }
+                  className="border-gray-600"
                 />
-                <label
-                  htmlFor="featured"
-                  className="ml-2 text-sm text-gray-300"
-                >
+                <Label htmlFor="featured" className="text-gray-300">
                   Mark as featured project
-                </label>
+                </Label>
               </div>
 
-
-              <div className="flex gap-4 pt-6 border-t border-gray-700">
-                <button
+              <div className="flex gap-4 pt-6">
+                <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-8 py-3 rounded-lg transition-colors flex items-center gap-2"
+                  className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   {loading ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
                       Updating...
                     </>
                   ) : (
                     <>
-                      <Check className="w-5 h-5" />
+                      <Check className="w-5 h-5 mr-2" />
                       Update Project
                     </>
                   )}
-                </button>
+                </Button>
 
-                <Link
-                  href="/dashboard/projects"
-                  className="bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-lg transition-colors"
+                <Button
+                  variant="outline"
+                  asChild
+                  className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
                 >
-                  Cancel
-                </Link>
+                  <Link href="/dashboard/projects">Cancel</Link>
+                </Button>
               </div>
-            </div>
-          </div>
-        </form>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

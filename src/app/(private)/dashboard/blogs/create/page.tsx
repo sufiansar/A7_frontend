@@ -4,9 +4,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { ArrowLeft, Plus } from "lucide-react";
 
 import ImageUpload from "@/components/ImageUpload";
 import { createBlog } from "@/actions/blogApi";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function CreateBlogPage() {
   const [formData, setFormData] = useState({
@@ -58,7 +65,7 @@ export default function CreateBlogPage() {
       } else {
         toast.error(result?.error || "Failed to create blog");
       }
-    } catch (error) {
+    } catch {
       toast.error("An unexpected error occurred");
     } finally {
       setIsSubmitting(false);
@@ -70,6 +77,16 @@ export default function CreateBlogPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
+            <Button
+              variant="ghost"
+              asChild
+              className="mb-4 text-gray-400 hover:text-white p-0"
+            >
+              <Link href="/dashboard/blogs">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Blogs
+              </Link>
+            </Button>
             <h1 className="text-3xl font-bold">
               Create{" "}
               <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
@@ -80,100 +97,79 @@ export default function CreateBlogPage() {
               Write and publish your blog post
             </p>
           </div>
-
-          <Link
-            href="/dashboard/blogs"
-            className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors flex items-center gap-2"
-          >
-            Back to Blogs
-          </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <div className="grid gap-6">
-              <div>
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
+        <Card className="max-w-4xl mx-auto bg-gray-800 border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-white">Blog Information</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="title" className="text-gray-300">
                   Title *
-                </label>
-                <input
-                  type="text"
+                </Label>
+                <Input
                   id="title"
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
                   placeholder="Enter blog title..."
                 />
               </div>
 
-              <div>
-                <label
-                  htmlFor="excerpt"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
+              <div className="space-y-2">
+                <Label htmlFor="excerpt" className="text-gray-300">
                   Excerpt
-                </label>
-                <textarea
+                </Label>
+                <Input
                   id="excerpt"
                   name="excerpt"
                   value={formData.excerpt}
                   onChange={handleChange}
-                  rows={3}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  placeholder="Brief description of your blog post..."
+                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                  placeholder="Brief description of the blog post..."
                 />
               </div>
 
-              <div>
-                <label
-                  htmlFor="content"
-                  className="block text-sm font-medium text-gray-300 mb-2"
-                >
+              <div className="space-y-2">
+                <Label htmlFor="content" className="text-gray-300">
                   Content *
-                </label>
-                <textarea
+                </Label>
+                <Textarea
                   id="content"
                   name="content"
                   value={formData.content}
                   onChange={handleChange}
                   required
                   rows={12}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 resize-vertical"
                   placeholder="Write your blog content here..."
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label
-                    htmlFor="tags"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="tags" className="text-gray-300">
                     Tags
-                  </label>
-                  <input
-                    type="text"
+                  </Label>
+                  <Input
                     id="tags"
                     name="tags"
                     value={formData.tags}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="react, javascript, web development"
+                    className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
+                    placeholder="React, Next.js, TypeScript"
                   />
-                  <p className="text-gray-400 text-sm mt-1">
+                  <p className="text-sm text-gray-400">
                     Separate tags with commas
                   </p>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Cover Image
-                  </label>
+                <div className="space-y-2">
+                  <Label className="text-gray-300">Cover Image</Label>
                   <ImageUpload
                     onImageChange={setCoverImageFile}
                     className="w-full"
@@ -181,42 +177,53 @@ export default function CreateBlogPage() {
                 </div>
               </div>
 
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
+              <div className="flex items-center space-x-2">
+                <Checkbox
                   id="published"
-                  name="published"
                   checked={formData.published}
-                  onChange={handleChange}
-                  className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+                  onCheckedChange={(checked) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      published: checked as boolean,
+                    }))
+                  }
+                  className="border-gray-600"
                 />
-                <label
-                  htmlFor="published"
-                  className="ml-2 text-sm text-gray-300"
-                >
-                  Publish immediately
-                </label>
+                <Label htmlFor="published" className="text-gray-300">
+                  Publish this blog post
+                </Label>
               </div>
 
-              <div className="flex gap-4 pt-6 border-t border-gray-700">
-                <button
+              <div className="flex gap-4 pt-6">
+                <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-8 py-3 rounded-lg transition-colors flex items-center gap-2"
+                  className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white"
                 >
-                  {isSubmitting ? "Creating..." : "Create Blog"}
-                </button>
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create Blog
+                    </>
+                  )}
+                </Button>
 
-                <Link
-                  href="/dashboard/blogs"
-                  className="bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-lg transition-colors"
+                <Button
+                  variant="outline"
+                  asChild
+                  className="bg-gray-700 border-gray-600 text-white hover:bg-gray-600"
                 >
-                  Cancel
-                </Link>
+                  <Link href="/dashboard/blogs">Cancel</Link>
+                </Button>
               </div>
-            </div>
-          </div>
-        </form>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

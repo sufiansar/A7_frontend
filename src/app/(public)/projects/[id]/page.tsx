@@ -10,7 +10,7 @@ async function getProjectByIdWithApi(id: string): Promise<ProjectItem | null> {
   try {
     const project = await getProjectById(id);
     return project;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -39,8 +39,7 @@ export default async function ProjectDetailView({ params }: DynamicPageProps) {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <div className="container mx-auto px-4 py-8">
-
+      <div className="container mx-auto px-4 py-24">
         <div className="mb-6">
           <Link
             href="/projects"
@@ -51,14 +50,12 @@ export default async function ProjectDetailView({ params }: DynamicPageProps) {
           </Link>
         </div>
 
-
         <div className="max-w-4xl mx-auto">
           <header className="mb-8">
             <div className="flex items-center gap-4 mb-4">
               <h1 className="text-4xl md:text-5xl font-bold text-white">
                 {project.title}
               </h1>
-
 
               {project.status && (
                 <span
@@ -73,7 +70,6 @@ export default async function ProjectDetailView({ params }: DynamicPageProps) {
                   {project.status}
                 </span>
               )}
-
 
               {project.featured && (
                 <span className="px-4 py-2 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded-full text-sm font-medium">
@@ -93,7 +89,6 @@ export default async function ProjectDetailView({ params }: DynamicPageProps) {
               <span>•</span>
               <span className="text-blue-400">By {project.author.name}</span>
             </div>
-
 
             <div className="flex gap-4 mb-8">
               {project.githubUrl && (
@@ -132,7 +127,6 @@ export default async function ProjectDetailView({ params }: DynamicPageProps) {
             )}
           </header>
 
-
           <section className="mb-12">
             <h2 className="text-2xl font-bold mb-4 text-white">
               About This Project
@@ -143,7 +137,6 @@ export default async function ProjectDetailView({ params }: DynamicPageProps) {
               </div>
             </div>
           </section>
-
 
           {project.technologies && project.technologies.length > 0 && (
             <section className="mb-12">
@@ -162,7 +155,6 @@ export default async function ProjectDetailView({ params }: DynamicPageProps) {
               </div>
             </section>
           )}
-
 
           <section className="grid md:grid-cols-2 gap-8 mb-12 p-6 bg-gray-800 rounded-lg border border-gray-700">
             <div>
@@ -204,7 +196,6 @@ export default async function ProjectDetailView({ params }: DynamicPageProps) {
             </div>
           </section>
         </div>
-
 
         <div className="max-w-4xl mx-auto mt-16 pt-8 border-t border-gray-700">
           <div className="flex justify-between items-center">

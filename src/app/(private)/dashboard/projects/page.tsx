@@ -5,7 +5,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { getProjects, deleteProject } from "@/actions/projectApi";
 import { ProjectItem } from "@/interfaces";
-import { useRouter } from "next/navigation";
+
 import {
   Plus,
   FolderOpen,
@@ -16,6 +16,7 @@ import {
   Loader2,
   X,
   AlertTriangle,
+  ArrowLeft,
 } from "lucide-react";
 
 export default function ProjectManagementDashboard() {
@@ -38,24 +39,24 @@ export default function ProjectManagementDashboard() {
     try {
       const data = await getProjects();
       setProjects(data);
-    } catch (error) {
+    } catch {
       toast.error("Failed to load projects");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id: string, title: string) => {
+  const handleDelete = async (id: string) => {
     setDeleteModal({
       isOpen: true,
-      project: { id, title },
+      project: { id, title: "" },
     });
   };
 
   const confirmDelete = async () => {
     if (!deleteModal.project) return;
 
-    const { id, title } = deleteModal.project;
+    const { id } = deleteModal.project;
     setDeleting(id);
     setDeleteModal({ isOpen: false, project: null });
 
@@ -72,7 +73,7 @@ export default function ProjectManagementDashboard() {
       } else {
         toast.error(result.error || "Failed to delete project");
       }
-    } catch (error) {
+    } catch {
       toast.dismiss(loadingToast);
       toast.error("An unexpected error occurred");
     } finally {
@@ -95,14 +96,22 @@ export default function ProjectManagementDashboard() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
-
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">
-            Manage{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Projects
-            </span>
-          </h1>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/dashboard"
+              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </Link>
+            <h1 className="text-3xl font-bold">
+              Manage{" "}
+              <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                Projects
+              </span>
+            </h1>
+          </div>
 
           <Link
             href="/dashboard/projects/create"
@@ -112,7 +121,6 @@ export default function ProjectManagementDashboard() {
             Create New Project
           </Link>
         </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
@@ -136,7 +144,6 @@ export default function ProjectManagementDashboard() {
             </p>
           </div>
         </div>
-
 
         {projects.length === 0 ? (
           <div className="bg-gray-800 rounded-lg border border-gray-700 p-12 text-center">
@@ -245,7 +252,6 @@ export default function ProjectManagementDashboard() {
 
                       <td className="p-4">
                         <div className="flex items-center gap-2 justify-end">
-
                           {project.liveUrl && (
                             <a
                               href={project.liveUrl}
@@ -257,7 +263,6 @@ export default function ProjectManagementDashboard() {
                               <ExternalLink className="w-4 h-4" />
                             </a>
                           )}
-
 
                           {project.githubUrl && (
                             <a
@@ -271,7 +276,6 @@ export default function ProjectManagementDashboard() {
                             </a>
                           )}
 
-
                           <Link
                             href={`/dashboard/projects/edit/${project.id}`}
                             className="p-2 text-gray-400 hover:text-yellow-400 transition-colors"
@@ -280,11 +284,8 @@ export default function ProjectManagementDashboard() {
                             <Edit className="w-4 h-4" />
                           </Link>
 
-
                           <button
-                            onClick={() =>
-                              handleDelete(project.id, project.title)
-                            }
+                            onClick={() => handleDelete(project.id)}
                             disabled={deleting === project.id}
                             className="p-2 text-gray-400 hover:text-red-400 transition-colors disabled:opacity-50"
                             title="Delete"
@@ -304,7 +305,6 @@ export default function ProjectManagementDashboard() {
             </div>
           </div>
         )}
-
 
         {deleteModal.isOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

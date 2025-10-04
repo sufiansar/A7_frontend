@@ -16,7 +16,7 @@ export const getSkillsPublic = async () => {
 
     const data = await res.json();
     return data?.data || [];
-  } catch (error) {
+  } catch {
     return [];
   }
 };
@@ -34,7 +34,7 @@ export const getSkills = async () => {
     );
 
     return ok ? result?.data || [] : [];
-  } catch (error) {
+  } catch {
     return [];
   }
 };
@@ -55,7 +55,7 @@ export const getSkillById = async (id: string) => {
     }
 
     return result.data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

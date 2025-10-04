@@ -15,14 +15,13 @@ export default function ImageUpload({
   initialImage,
   className = "",
 }: ImageUploadProps) {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const maxSizeMB = 5;
-  const maxSize = maxSizeMB * 1024 * 1024; 
+  const maxSize = maxSizeMB * 1024 * 1024;
   const acceptedTypes = [
     "image/png",
     "image/jpeg",
@@ -50,7 +49,6 @@ export default function ImageUpload({
       return;
     }
 
-    setSelectedFile(file);
     const filePreview = URL.createObjectURL(file);
     setPreview(filePreview);
     onImageChange(file);
@@ -84,7 +82,6 @@ export default function ImageUpload({
   };
 
   const handleRemove = () => {
-    setSelectedFile(null);
     if (preview) {
       URL.revokeObjectURL(preview);
     }
@@ -105,7 +102,6 @@ export default function ImageUpload({
 
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}

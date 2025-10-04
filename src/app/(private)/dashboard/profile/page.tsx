@@ -9,6 +9,10 @@ import {
   updateUserProfile,
   getUserProfile,
 } from "@/actions/userApi";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
@@ -38,7 +42,7 @@ export default function ProfilePage() {
             const currentImage = userData.picture || session?.user?.image || "";
             setProfileImage(currentImage);
           }
-        } catch (error) {
+        } catch {
           if (session?.user) {
             setFormData({
               name: session.user.name || "",
@@ -101,7 +105,7 @@ export default function ProfilePage() {
         const errorMessage = result.error || "Failed to update picture";
         toast.error(errorMessage);
       }
-    } catch (error) {
+    } catch {
       toast.error("Upload failed");
     } finally {
       setIsLoading(false);
@@ -132,7 +136,7 @@ export default function ProfilePage() {
         const errorMessage = result.error || "Failed to update profile";
         toast.error(errorMessage);
       }
-    } catch (error) {
+    } catch {
       toast.error("Update failed");
     } finally {
       setIsLoading(false);
@@ -145,7 +149,6 @@ export default function ProfilePage() {
         <h1 className="text-3xl font-bold mb-8">Profile</h1>
 
         <div className="bg-gray-800 rounded-lg p-6 space-y-6">
-
           <div className="flex items-center space-x-4">
             <div className="relative">
               <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center overflow-hidden">
@@ -154,7 +157,7 @@ export default function ProfilePage() {
                     src={profileImage}
                     alt="Profile"
                     className="w-20 h-20 object-cover"
-                    key={profileImage} 
+                    key={profileImage}
                   />
                 ) : (
                   <User className="w-10 h-10 text-white" />
@@ -178,58 +181,59 @@ export default function ProfilePage() {
             </div>
           </div>
 
-
           <div>
-            <label className="block text-sm font-medium mb-2">Name</label>
-            <input
+            <Label className="text-gray-300">Name</Label>
+            <Input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
               placeholder="Your name"
             />
           </div>
 
-
           <div>
-            <label className="block text-sm font-medium mb-2">Email</label>
-            <input
+            <Label className="text-gray-300">Email</Label>
+            <Input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
               placeholder="Your email"
             />
           </div>
 
-
           <div>
-            <label className="block text-sm font-medium mb-2">Bio</label>
-            <textarea
+            <Label className="text-gray-300">Bio</Label>
+            <Textarea
               name="bio"
               value={formData.bio}
               onChange={handleInputChange}
               rows={3}
-              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
               placeholder="Tell us about yourself..."
             />
           </div>
 
-
-          <button
+          <Button
             onClick={handleSave}
             disabled={isLoading}
-            className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
             {isLoading ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Saving...
+              </>
             ) : (
-              <Save className="w-4 h-4 mr-2" />
+              <>
+                <Save className="w-4 h-4 mr-2" />
+                Save Profile
+              </>
             )}
-            Save Profile
-          </button>
+          </Button>
         </div>
       </div>
     </div>

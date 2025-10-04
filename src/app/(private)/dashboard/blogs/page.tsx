@@ -5,7 +5,6 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { getBlogs, deleteBlog } from "@/actions/blogApi";
 import { BlogPost } from "@/interfaces";
-import { useRouter } from "next/navigation";
 import {
   Plus,
   FileText,
@@ -13,7 +12,7 @@ import {
   Edit,
   Trash2,
   Loader2,
-  X,
+  ArrowLeft,
   AlertTriangle,
 } from "lucide-react";
 
@@ -37,24 +36,24 @@ export default function BlogManagementDashboard() {
     try {
       const data = await getBlogs();
       setBlogs(data);
-    } catch (error) {
+    } catch {
       toast.error("Failed to load blogs");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id: string, title: string) => {
+  const handleDelete = async (id: string) => {
     setDeleteModal({
       isOpen: true,
-      blog: { id, title },
+      blog: { id, title: "" },
     });
   };
 
   const confirmDelete = async () => {
     if (!deleteModal.blog) return;
 
-    const { id, title } = deleteModal.blog;
+    const { id } = deleteModal.blog;
     setDeleting(id);
     setDeleteModal({ isOpen: false, blog: null });
 
@@ -71,7 +70,7 @@ export default function BlogManagementDashboard() {
       } else {
         toast.error(result.error || "Failed to delete blog");
       }
-    } catch (error) {
+    } catch {
       toast.dismiss(loadingToast);
       toast.error("An unexpected error occurred");
     } finally {
@@ -94,14 +93,22 @@ export default function BlogManagementDashboard() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
-
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">
-            Manage{" "}
-            <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Blogs
-            </span>
-          </h1>
+          <div className="flex items-center gap-4">
+            <Link
+              href="/dashboard"
+              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </Link>
+            <h1 className="text-3xl font-bold">
+              Manage{" "}
+              <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                Blogs
+              </span>
+            </h1>
+          </div>
 
           <Link
             href="/dashboard/blogs/create"
@@ -111,7 +118,6 @@ export default function BlogManagementDashboard() {
             Create New Blog
           </Link>
         </div>
-
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
@@ -133,7 +139,6 @@ export default function BlogManagementDashboard() {
             </p>
           </div>
         </div>
-
 
         {blogs.length === 0 ? (
           <div className="bg-gray-800 rounded-lg border border-gray-700 p-12 text-center">
@@ -230,7 +235,6 @@ export default function BlogManagementDashboard() {
 
                       <td className="p-4">
                         <div className="flex items-center gap-2 justify-end">
-
                           <Link
                             href={`/blogs/${blog.id}`}
                             className="p-2 text-gray-400 hover:text-blue-400 transition-colors"
@@ -238,7 +242,6 @@ export default function BlogManagementDashboard() {
                           >
                             <Eye className="w-4 h-4" />
                           </Link>
-
 
                           <Link
                             href={`/dashboard/blogs/edit/${blog.id}`}
@@ -248,9 +251,8 @@ export default function BlogManagementDashboard() {
                             <Edit className="w-4 h-4" />
                           </Link>
 
-
                           <button
-                            onClick={() => handleDelete(blog.id, blog.title)}
+                            onClick={() => handleDelete(blog.id)}
                             disabled={deleting === blog.id}
                             className="p-2 text-gray-400 hover:text-red-400 transition-colors disabled:opacity-50"
                             title="Delete"
@@ -271,7 +273,6 @@ export default function BlogManagementDashboard() {
           </div>
         )}
       </div>
-
 
       {deleteModal.isOpen && deleteModal.blog && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
