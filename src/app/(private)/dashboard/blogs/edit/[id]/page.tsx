@@ -118,10 +118,6 @@ export default function EditBlogPage({ params }: EditBlogPageProps) {
         formDataToSend.append("file", coverImageFile);
       }
 
-      for (const [key, value] of formDataToSend.entries()) {
-        console.log(`${key}:`, value);
-      }
-
       const result = await updateBlog(id, formDataToSend);
 
       if (result) {

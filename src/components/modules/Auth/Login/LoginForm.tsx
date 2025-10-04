@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 
 import Password from "@/components/ui/Password";
 import toast from "react-hot-toast";
@@ -42,11 +42,30 @@ export default function LoginForm() {
 
       if (result?.error) {
         toast.error("Invalid email or password");
-      } else {
+      } else if (result?.ok) {
         toast.success("Login successful!");
-        router.push("/dashboard");
+
+        // Wait a moment for session to be established
+        setTimeout(async () => {
+          const session = await getSession();
+          if (session) {
+            // Force navigation to dashboard
+            router.replace("/dashboard");
+            // Also try window.location as backup
+            setTimeout(() => {
+              if (window.location.pathname !== "/dashboard") {
+                window.location.href = "/dashboard";
+              }
+            }, 100);
+          } else {
+            toast.error("Session not established. Please try again.");
+          }
+        }, 500);
+      } else {
+        toast.error("Login failed. Please try again.");
       }
-    } catch {
+    } catch (error) {
+      console.error("Login error:", error);
       toast.error("An unexpected error occurred");
     } finally {
       setIsLoading(false);

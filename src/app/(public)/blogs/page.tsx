@@ -1,12 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getBlogs } from "@/actions/blogApi";
+import { getBlogsPublic } from "@/actions/blogApi";
 import { BlogPost } from "@/interfaces";
 
 export const revalidate = 60;
 
 export default async function BlogShowcase() {
-  const blogs = await getBlogs();
+  const blogs = await getBlogsPublic();
 
   if (!blogs || blogs.length === 0) {
     return (

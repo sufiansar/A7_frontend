@@ -69,7 +69,7 @@ export default function CreateProjectPage() {
       const result = await createProject(formDataToSend);
 
       if (result?.success) {
-        toast.success("Project created successfully! 🎉");
+        toast.success("Project created successfully!");
         router.push("/dashboard/projects");
       } else {
         toast.error(result?.error || "Failed to create project");
@@ -185,7 +185,7 @@ export default function CreateProjectPage() {
                     value={formData.liveUrl}
                     onChange={handleChange}
                     className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                    placeholder="https://example.com"
+                    placeholder="live project URL"
                   />
                 </div>
 
@@ -200,7 +200,7 @@ export default function CreateProjectPage() {
                     value={formData.githubUrl}
                     onChange={handleChange}
                     className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                    placeholder="https://github.com/username/repo"
+                    placeholder="GitHub repository URL"
                   />
                 </div>
               </div>

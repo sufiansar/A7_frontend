@@ -1,4 +1,5 @@
 import { getAuthHeaders, makeApiCall, revalidateCache } from "./apiUtils";
+import { ProjectUpdateData } from "@/types";
 
 export const getProjectsPublic = async () => {
   try {
@@ -138,9 +139,10 @@ export const updateProject = async (id: string, data: FormData) => {
     const featured = data.get("featured") === "true";
     const status = data.get("status") as string;
     const imageFile = data.get("file") as File;
+    const existingImageUrl = data.get("existingImageUrl") as string;
 
     const formData = new FormData();
-    const projectData = {
+    const projectData: ProjectUpdateData = {
       title,
       description,
       excerpt,
@@ -152,6 +154,12 @@ export const updateProject = async (id: string, data: FormData) => {
       featured,
       status,
     };
+
+    if (!imageFile || imageFile.size === 0) {
+      if (existingImageUrl) {
+        projectData.imageUrl = existingImageUrl;
+      }
+    }
 
     formData.append("data", JSON.stringify(projectData));
     if (imageFile && imageFile.size > 0) {

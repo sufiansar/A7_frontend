@@ -29,7 +29,6 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate form submission
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       toast.success("Message sent successfully!");
@@ -44,7 +43,6 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">
       <div className="max-w-4xl mx-auto px-6 py-28">
-        {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Contact{" "}
@@ -58,7 +56,6 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
           <Card className="bg-white/5 backdrop-blur-sm border-white/10">
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold mb-6">Send Message</h2>
@@ -132,7 +129,6 @@ const Contact = () => {
             </CardContent>
           </Card>
 
-          {/* Contact Info */}
           <div className="space-y-8">
             <div>
               <h2 className="text-2xl font-bold mb-6">Get In Touch</h2>

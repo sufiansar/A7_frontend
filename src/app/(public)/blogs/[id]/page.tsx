@@ -1,4 +1,4 @@
-import { getBlogById, getBlogs } from "@/actions/blogApi";
+import { getBlogById, getBlogsPublic } from "@/actions/blogApi";
 import { BlogPost, DynamicPageProps } from "@/interfaces";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -18,7 +18,7 @@ async function getBlogByIdWithApi(id: string): Promise<BlogPost | null> {
 
 export async function generateStaticParams() {
   try {
-    const blogs = await getBlogs();
+    const blogs = await getBlogsPublic();
 
     return blogs.map((blog: BlogPost) => ({
       id: blog.id,

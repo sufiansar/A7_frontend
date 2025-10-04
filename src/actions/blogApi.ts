@@ -1,4 +1,5 @@
 import { getAuthHeaders, makeApiCall, revalidateCache } from "./apiUtils";
+import { BlogUpdateData } from "@/types";
 
 export const getBlogsPublic = async () => {
   try {
@@ -113,7 +114,6 @@ export const createBlog = async (data: FormData) => {
       excerpt: excerpt?.trim() || "",
       tags: tagsArray,
       published: Boolean(published),
-      authorId: session.user.id,
     };
 
     formData.append("data", JSON.stringify(blogData));
@@ -160,6 +160,7 @@ export const updateBlog = async (id: string, data: FormData) => {
     const tags = data.get("tags") as string;
     const published = data.get("published") === "true";
     const coverImageFile = data.get("file") as File;
+    const existingCoverImage = data.get("existingCoverImage") as string;
 
     const formData = new FormData();
 
@@ -178,7 +179,7 @@ export const updateBlog = async (id: string, data: FormData) => {
       .replace(/-+/g, "-")
       .trim();
 
-    const blogData = {
+    const blogData: BlogUpdateData = {
       title: title.trim(),
       slug: slug,
       content: content.trim(),
@@ -186,6 +187,12 @@ export const updateBlog = async (id: string, data: FormData) => {
       tags: tagsArray,
       published: Boolean(published),
     };
+
+    if (!coverImageFile || coverImageFile.size === 0) {
+      if (existingCoverImage) {
+        blogData.coverImage = existingCoverImage;
+      }
+    }
 
     formData.append("data", JSON.stringify(blogData));
 

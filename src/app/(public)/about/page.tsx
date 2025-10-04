@@ -151,7 +151,7 @@ const About = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
           {[
             { number: "10+", label: "Practice Projects" },
-            { number: "1+", label: "Years Learning" },
+            { number: "1.5+", label: "Years Learning" },
             { number: "15+", label: "Technologies" },
             { number: "100%", label: "Passion for Code" },
           ].map((stat, index) => (
@@ -191,7 +191,6 @@ const About = () => {
           </div>
         </div>
 
-        {/* Timeline Section */}
         <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">

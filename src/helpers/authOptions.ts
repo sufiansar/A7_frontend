@@ -108,9 +108,35 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // Handle callback URL parameter
+      if (url.includes("callbackUrl")) {
+        const urlParams = new URLSearchParams(url.split("?")[1]);
+        const callbackUrl = urlParams.get("callbackUrl");
+        if (callbackUrl) {
+          return decodeURIComponent(callbackUrl);
+        }
+      }
+
+      // If url is a relative path, prepend baseUrl
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+
+      // If url is same origin, allow it
+      if (new URL(url).origin === baseUrl) {
+        return url;
+      }
+
+      // Default redirect to dashboard after login
+      return `${baseUrl}/dashboard`;
+    },
   },
   secret: process.env.AUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
   pages: {
-    signIn: "/",
+    signIn: "/login",
   },
 };

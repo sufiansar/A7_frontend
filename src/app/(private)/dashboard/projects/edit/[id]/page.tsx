@@ -230,7 +230,7 @@ export default function EditProjectPage() {
                     value={formData.liveUrl}
                     onChange={handleChange}
                     className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                    placeholder="https://example.com"
+                    placeholder="live project URL"
                   />
                 </div>
 
@@ -245,7 +245,7 @@ export default function EditProjectPage() {
                     value={formData.githubUrl}
                     onChange={handleChange}
                     className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                    placeholder="https://github.com/username/repo"
+                    placeholder="GitHub repository URL"
                   />
                 </div>
               </div>

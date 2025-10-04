@@ -1,12 +1,12 @@
 import HeroSection from "@/components/HeroSection";
-import { getBlogs } from "@/actions/blogApi";
+import { getBlogsPublic } from "@/actions/blogApi";
 import { BlogPost } from "@/interfaces";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 
 export default async function HomePage() {
-  const allBlogs = await getBlogs();
+  const allBlogs = await getBlogsPublic();
 
   const blogs = allBlogs.slice(0, 3);
 
