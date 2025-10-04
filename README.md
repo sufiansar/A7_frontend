@@ -2,8 +2,6 @@
 
 <div align="center">
 
-![Portfolio Banner](https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=400&fit=crop&crop=edges&q=80)
-
 **A modern, responsive portfolio website built with Next.js 15 and TypeScript**
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
@@ -14,6 +12,21 @@
 [🌐 Live Demo](https://portfolio-frontend-five-psi.vercel.app/) • [📖 Documentation](#documentation) • [🐛 Report Bug](https://github.com/sufiansar/A7_frontend/issues) • [✨ Request Feature](https://github.com/sufiansar/A7_frontend/issues)
 
 </div>
+
+---
+
+## 📖 About This Project
+
+This is a full-featured personal portfolio website designed to showcase professional skills, projects, and blog content. Built with modern web technologies, it serves as both a public portfolio and a content management platform with secure admin capabilities.
+
+**Key Highlights:**
+
+- **Public Portfolio**: Showcases skills, projects, and blog posts with elegant design
+- **Admin Dashboard**: Complete content management system for creating and editing content
+- **Modern Architecture**: Built with Next.js 15 App Router and latest React features
+- **Responsive Design**: Optimized for all devices from mobile to desktop
+- **Performance Focused**: Tag-based caching for instant content updates
+- **Type Safety**: Full TypeScript implementation throughout the application
 
 ---
 
