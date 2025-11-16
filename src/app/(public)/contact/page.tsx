@@ -9,10 +9,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import toast from "react-hot-toast";
 
+// Helper function to dynamically select the correct API URL
+const getBaseUrl = () => {
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:5000/api/v1";
+  }
+  return process.env.NEXT_PUBLIC_BASE_API || "";
+};
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    subject: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,12 +38,30 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const res = await fetch(`${getBaseUrl()}/contact/send`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      // Check if response is valid JSON
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Invalid response from server");
+      }
+
+      if (!res.ok) throw new Error(data.message || "Failed to send message");
 
       toast.success("Message sent successfully!");
-      setFormData({ name: "", email: "", message: "" });
-    } catch {
-      toast.error("Failed to send message.");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      toast.error(msg || "Something went wrong.");
     } finally {
       setIsSubmitting(false);
     }
@@ -42,7 +69,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">
-      <div className="max-w-4xl mx-auto px-6 py-28">
+      <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Contact{" "}
@@ -56,6 +83,7 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Contact Form */}
           <Card className="bg-white/5 backdrop-blur-sm border-white/10">
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold mb-6">Send Message</h2>
@@ -89,6 +117,21 @@ const Contact = () => {
                     required
                     className="bg-white/10 border-white/20 text-white placeholder-gray-400"
                     placeholder="your@email.com"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="subject" className="text-gray-300">
+                    Subject
+                  </Label>
+                  <Input
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    className="bg-white/10 border-white/20 text-white placeholder-gray-400"
+                    placeholder="Subject"
                   />
                 </div>
 
@@ -129,6 +172,7 @@ const Contact = () => {
             </CardContent>
           </Card>
 
+          {/* Contact Info */}
           <div className="space-y-8">
             <div>
               <h2 className="text-2xl font-bold mb-6">Get In Touch</h2>
@@ -146,10 +190,10 @@ const Contact = () => {
                 <div>
                   <h3 className="text-white font-medium">Email</h3>
                   <a
-                    href="mailto:sufian9184@gmail.com"
+                    href="mailto:sufiancodecrush@gmail.com"
                     className="text-purple-400 hover:text-purple-300"
                   >
-                    sufian9184@gmail.com
+                    sufiancodecrush@gmail.com
                   </a>
                 </div>
               </div>
@@ -160,7 +204,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="text-white font-medium">Phone</h3>
-                  <p className="text-gray-300">+880 1234-567890</p>
+                  <p className="text-gray-300">+88 01981600560</p>
                 </div>
               </div>
 

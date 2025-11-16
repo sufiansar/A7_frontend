@@ -5,7 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { getProjectById, updateProject } from "@/actions/projectApi";
-import ImageUpload from "@/components/ImageUpload";
+import MultiImageUpload from "@/components/MultiImageUpload";
 import { ArrowLeft, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,7 @@ export default function EditProjectPage() {
     githubUrl: "",
     featured: false,
   });
-  const [projectImageFile, setProjectImageFile] = useState<File | null>(null);
+  const [projectImageFiles, setProjectImageFiles] = useState<File[]>([]);
   const [currentImageUrl, setCurrentImageUrl] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -91,18 +91,23 @@ export default function EditProjectPage() {
     try {
       const formDataToSend = new FormData();
 
-      formDataToSend.append("title", formData.title);
-      formDataToSend.append("description", formData.description);
-      formDataToSend.append("excerpt", formData.description.substring(0, 200));
-      formDataToSend.append("technologies", formData.technologies);
-      formDataToSend.append("liveUrl", formData.liveUrl);
-      formDataToSend.append("githubUrl", formData.githubUrl);
-      formDataToSend.append("featured", String(formData.featured));
-      formDataToSend.append("status", "active");
+      const projectData = {
+        title: formData.title,
+        description: formData.description,
+        excerpt: formData.description.substring(0, 200),
+        technologies: formData.technologies
+          ? formData.technologies.split(",").map((t) => t.trim())
+          : [],
+        liveUrl: formData.liveUrl,
+        githubUrl: formData.githubUrl,
+        featured: Boolean(formData.featured),
+        status: "active",
+      };
 
-      if (projectImageFile) {
-        formDataToSend.append("file", projectImageFile);
-      }
+      formDataToSend.append("data", JSON.stringify(projectData));
+
+      // append multiple files as 'files' to match backend MulterUpload.array('files')
+      projectImageFiles.forEach((f) => formDataToSend.append("files", f));
 
       const result = await updateProject(projectId, formDataToSend);
 
@@ -210,9 +215,9 @@ export default function EditProjectPage() {
 
                 <div className="space-y-2">
                   <Label className="text-gray-300">Project Image</Label>
-                  <ImageUpload
-                    onImageChange={setProjectImageFile}
-                    initialImage={currentImageUrl}
+                  <MultiImageUpload
+                    onChange={setProjectImageFiles}
+                    initialImages={currentImageUrl ? [currentImageUrl] : []}
                     className="w-full"
                   />
                 </div>

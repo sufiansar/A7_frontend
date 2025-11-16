@@ -1,68 +1,36 @@
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Animation helpers are intentionally disabled to keep the UI natural and static.
+   Existing classnames are kept so components don't need to be rewritten. */
 
 .animate-fadeInUp {
-  animation: fadeInUp 1s ease forwards;
+  /* No-op: fade/translate animations disabled globally */
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 .delay-150 {
-  animation-delay: 0.15s;
+  animation-delay: 0s;
 }
-
 .delay-300 {
-  animation-delay: 0.3s;
+  animation-delay: 0s;
 }
-
 .delay-500 {
-  animation-delay: 0.5s;
+  animation-delay: 0s;
 }
-
 .delay-700 {
-  animation-delay: 0.7s;
+  animation-delay: 0s;
 }
-
 .delay-900 {
-  animation-delay: 0.9s;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+  animation-delay: 0s;
 }
 
 .animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-@keyframes pulseUnderline {
-  0%,
-  100% {
-    transform: scaleX(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scaleX(1.2);
-    opacity: 0.7;
-  }
+  /* No-op: floating animation disabled */
+  animation: none !important;
 }
 
 .animate-pulseUnderline {
-  animation: pulseUnderline 2s infinite;
+  /* No-op: pulse underline disabled */
+  animation: none !important;
   transform-origin: left;
 }
 

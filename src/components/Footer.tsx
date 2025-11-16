@@ -5,10 +5,8 @@ import { Github, Linkedin, Mail } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="relative mt-20 bg-gradient-to-br from-black via-gray-900 to-black border-t border-white/10 overflow-hidden">
-      <div className="absolute inset-0 bg-grid-white/[0.01] bg-[size:50px_50px]"></div>
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-900/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gray-800/30 rounded-full blur-3xl"></div>
+    <footer className="relative bg-gradient-to-br from-black via-gray-900 to-black border-t border-white/10 overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden></div>
 
       <div className="relative max-w-screen-xl mx-auto px-6 md:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -25,7 +23,7 @@ const Footer = () => {
               solutions.
             </p>
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               Available for freelance projects
             </div>
           </div>
@@ -88,18 +86,18 @@ const Footer = () => {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href="mailto:your.email@example.com"
-                  target="_blank"
+                  href="mailto:sufiancodecrush@gmail.com"
                   className="group flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 hover:border-white/20"
                 >
                   <Mail className="h-4 w-4 text-gray-400 group-hover:text-white" />
                   <span className="text-sm text-gray-400 group-hover:text-white">
-                    Email
+                    sufiancodecrush@gmail.com
                   </span>
                 </Link>
                 <Link
-                  href="https://linkedin.com/in/sufiansar" //github.com/sufiansar"
+                  href="https://github.com/sufiansar"
                   target="_blank"
+                  rel="noreferrer"
                   className="group flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 hover:border-white/20"
                 >
                   <Github className="h-4 w-4 text-gray-400 group-hover:text-white" />
@@ -108,8 +106,9 @@ const Footer = () => {
                   </span>
                 </Link>
                 <Link
-                  href="https://linkedin.com/in/sufiansar"
+                  href="https://www.linkedin.com/in/sufian32"
                   target="_blank"
+                  rel="noreferrer"
                   className="group flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 hover:border-white/20"
                 >
                   <Linkedin className="h-4 w-4 text-gray-400 group-hover:text-white" />
@@ -117,6 +116,22 @@ const Footer = () => {
                     LinkedIn
                   </span>
                 </Link>
+                <Link
+                  href="https://www.facebook.com/sufian.asr"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex items-center gap-3 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 hover:border-white/20"
+                >
+                  <span className="h-4 w-4 text-gray-400 group-hover:text-white">
+                    f
+                  </span>
+                  <span className="text-sm text-gray-400 group-hover:text-white">
+                    Facebook
+                  </span>
+                </Link>
+                <div className="flex items-center gap-3 px-4 py-2">
+                  <span className="text-sm text-gray-400">+88 01981600560</span>
+                </div>
               </div>
             </div>
           </div>

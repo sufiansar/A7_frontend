@@ -37,8 +37,8 @@ export default async function BlogDetailView({ params }: DynamicPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <div className="container mx-auto px-4 py-24">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">
+      <div className="container mx-auto px-4 py-12">
         <div className="mb-6">
           <Link
             href="/blogs"

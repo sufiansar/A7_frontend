@@ -3,15 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Menu, LogOut, User } from "lucide-react";
+// sheet component removed for mobile dropdown replacement
+import { LogOut, Menu, User } from "lucide-react";
 import { Logo } from "./logo";
 
 const Navbar = () => {
@@ -34,121 +29,165 @@ const Navbar = () => {
     await signOut({ callbackUrl: "/" });
   };
 
-  return (
-    <nav className="fixed top-6 inset-x-4 h-16 max-w-screen-xl mx-auto rounded-full bg-black/80 backdrop-blur-xl border border-white/10 z-50 shadow-2xl shadow-black/50 transition-all duration-300 hover:shadow-3xl hover:shadow-black/60">
-      <div className="flex h-full items-center justify-between px-6 md:px-8">
-        {/* Logo */}
-        <Link href="/" className="flex-shrink-0 group">
-          <Logo />
-        </Link>
+  const [scrolled, setScrolled] = useState(false);
 
-        {/* Desktop Menu */}
-        <ul className="hidden md:flex items-center gap-8 font-medium">
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const closeMobile = () => setMobileOpen(false);
+
+  return (
+    <nav className="fixed top-2 sm:top-4 left-2 right-2 sm:left-4 sm:right-6 z-50 pointer-events-auto">
+      <div
+        className={`relative max-w-screen-xl w-full mx-auto rounded-lg md:rounded-full px-4 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow-lg transition-all duration-300 overflow-visible md:overflow-hidden ${
+          scrolled
+            ? "backdrop-blur-md bg-gradient-to-br from-black/60 via-gray-900/60 to-black/60 border border-gray-800/40"
+            : "bg-transparent border border-transparent"
+        }`}
+      >
+        {/* Logo and name */}
+        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3">
+            <Logo />
+            <div className="hidden sm:block truncate">
+              <div className="font-bold text-white text-sm sm:text-base">
+                Md. Abu Sufian
+              </div>
+              <div className="text-[10px] sm:text-xs text-gray-400">
+                Full Stack Developer
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* Desktop Navigation */}
+        <ul className="hidden md:flex items-center gap-4 sm:gap-6 text-gray-300">
           {navItems.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}
-                className={`relative px-4 py-2 rounded-full transition-all duration-300 hover:bg-white/10 hover:backdrop-blur-sm ${
-                  pathname === item.href
-                    ? "text-white bg-white/15 shadow-lg"
-                    : "text-gray-300 hover:text-white"
+                className={`px-2 sm:px-3 py-1.5 sm:py-2 text-sm sm:text-base ${
+                  pathname === item.href ? "text-white" : "hover:text-white"
                 }`}
               >
                 {item.name}
-                <span
-                  className={`absolute left-1/2 -translate-x-1/2 -bottom-1 h-1 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-300 ${
-                    pathname === item.href ? "w-8 opacity-100" : "w-0 opacity-0"
-                  }`}
-                ></span>
               </Link>
             </li>
           ))}
         </ul>
 
-        {/* Actions + Mobile Menu */}
-        <div className="flex items-center gap-4 md:gap-6">
-          {/* Desktop Actions */}
+        {/* Right Side Actions */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-cyan-500 text-black font-medium text-sm sm:text-base"
+          >
+            Hire Me
+          </Link>
+
           {session ? (
-            <div className="hidden md:flex items-center gap-3">
-              <span className="text-gray-300 text-sm">
-                Welcome, {session.user?.name || session.user?.email}
-              </span>
-              <Button
-                onClick={handleLogout}
-                className="rounded-full px-6 py-2 text-sm md:text-base bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-red-500/25 transform hover:scale-105 transition-all duration-300"
+            <div className="hidden md:flex items-center gap-2 sm:gap-3">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full text-gray-200 hover:text-white text-sm"
               >
-                <LogOut className="w-4 h-4 mr-2" />
-                Logout
+                <User className="w-4 h-4 shrink-0" />
+                <span className="truncate">
+                  {session.user?.name || "Account"}
+                </span>
+              </Link>
+              <Button
+                variant="ghost"
+                onClick={handleLogout}
+                className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full border border-white/10 text-sm"
+              >
+                <LogOut className="w-4 h-4 shrink-0" />
+                <span>Logout</span>
               </Button>
             </div>
           ) : (
-            <Button className="hidden md:block rounded-full px-6 py-2 text-sm md:text-base bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transform hover:scale-105 transition-all duration-300">
-              <Link href="/login" className="block w-full text-center">
-                Login
-              </Link>
-            </Button>
+            <Link
+              href="/login"
+              className="hidden md:inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border border-cyan-500 text-cyan-300 hover:bg-white/5 transition text-sm sm:text-base"
+            >
+              Login
+            </Link>
           )}
 
-          {/* Mobile Menu (Sheet) */}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden text-white hover:bg-white/10 rounded-full"
-              >
-                <Menu className="h-6 w-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="w-64 bg-black/95 backdrop-blur-xl border-white/10"
+          {/* Mobile Menu */}
+          {/* Mobile Menu (dropdown panel instead of sheet) */}
+          <div className="md:hidden">
+            <Button
+              variant="ghost"
+              onClick={() => setMobileOpen((s) => !s)}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-menu"
+              className="p-2 rounded-full border border-white/10 text-gray-200 hover:text-white"
             >
-              <SheetHeader>
-                <SheetTitle>
-                  <Logo />
-                </SheetTitle>
-              </SheetHeader>
-              <nav className="mt-6 flex flex-col gap-4 text-lg font-medium">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`px-4 py-3 rounded-lg transition-all duration-300 hover:bg-white/10 ${
-                      pathname === item.href
-                        ? "text-white bg-white/15 shadow-lg"
-                        : "text-gray-300 hover:text-white"
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+              <Menu className="w-4 h-4" />
+            </Button>
 
-                {/* Mobile Actions */}
-                {session ? (
-                  <div className="mt-4 space-y-3">
-                    <div className="px-4 py-2 text-gray-300 text-sm border-t border-white/10 pt-4">
-                      <User className="w-4 h-4 inline mr-2" />
-                      {session.user?.name || session.user?.email}
-                    </div>
-                    <Button
-                      onClick={handleLogout}
-                      className="w-full rounded-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                    >
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Logout
-                    </Button>
+            {mobileOpen && (
+              <div
+                id="mobile-menu"
+                className="absolute top-full right-0 mt-2 w-[min(18rem,90vw)] bg-gradient-to-br from-black/60 via-gray-900/60 to-black/60 border border-gray-800/40 rounded-lg shadow-lg z-50"
+              >
+                <div className="p-3">
+                  <div className="text-gray-100 text-lg font-semibold mb-2">
+                    Menu
                   </div>
-                ) : (
-                  <Button className="rounded-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                    <Link href="/login" className="block w-full text-center">
-                      Login
+                  <nav className="flex flex-col gap-1.5">
+                    {navItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={closeMobile}
+                        className={`px-3 py-2 rounded text-gray-300 hover:bg-white/5 ${
+                          pathname === item.href ? "text-white" : ""
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                    <Link
+                      href="/contact"
+                      onClick={closeMobile}
+                      className="px-3 py-2 rounded text-gray-300 hover:bg-white/5"
+                    >
+                      Hire Me
                     </Link>
-                  </Button>
-                )}
-              </nav>
-            </SheetContent>
-          </Sheet>
+
+                    <div className="mt-3 border-t border-gray-800/50 pt-3">
+                      {session ? (
+                        <button
+                          onClick={() => {
+                            handleLogout();
+                            closeMobile();
+                          }}
+                          className="w-full text-left px-3 py-2 rounded hover:bg-white/5 text-gray-300"
+                        >
+                          Logout
+                        </button>
+                      ) : (
+                        <Link
+                          href="/login"
+                          onClick={closeMobile}
+                          className="block px-3 py-2 rounded hover:bg-white/5 text-gray-300"
+                        >
+                          Login
+                        </Link>
+                      )}
+                    </div>
+                  </nav>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </nav>

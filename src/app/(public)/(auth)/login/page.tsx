@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 group">

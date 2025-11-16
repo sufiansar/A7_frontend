@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+/* External animation utilities removed to keep UI natural. */
 
 @custom-variant dark (&:is(.dark *));
 
@@ -112,11 +112,111 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Custom Animations: disabled to provide a natural, static UI.
+   We intentionally do NOT disable `animate-spin` (Tailwind loader) so
+   loading indicators remain functional. */
+
+.animate-fadeInUp,
+.animate-float,
+.animate-pulseUnderline,
+.animate-gradient-x,
+.animate-shimmer,
+.animate-glow,
+.animate-slideInFromLeft,
+.animate-slideInFromRight,
+.animate-scaleIn,
+.animate-spin-slow {
+  animation: none !important;
+}
+
+.delay-100 {
+  animation-delay: 0.1s;
+}
+
+.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
+
+.delay-400 {
+  animation-delay: 0.4s;
+}
+
+.delay-500 {
+  animation-delay: 0.5s;
+}
+
+.delay-700 {
+  animation-delay: 0.7s;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
+/* Grid pattern */
+.bg-grid-white\/\[0\.01\] {
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.01) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.7);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-br from-black via-gray-900 to-black text-foreground;
+  }
+
+  /* Ensure content is visible under fixed navbar */
+  main {
+    position: relative;
+    z-index: 10;
   }
 }

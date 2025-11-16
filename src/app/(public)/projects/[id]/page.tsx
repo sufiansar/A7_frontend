@@ -3,6 +3,7 @@ import { ProjectItem, DynamicPageProps } from "@/interfaces";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Github, ExternalLink } from "lucide-react";
+import ProjectGallery from "@/components/ProjectGallery";
 
 async function getProjectByIdWithApi(id: string): Promise<ProjectItem | null> {
   try {
@@ -35,9 +36,17 @@ export default async function ProjectDetailView({ params }: DynamicPageProps) {
     notFound();
   }
 
+  // Determine the single cover image to show on the details page.
+  // Priority: explicit coverImage -> first image in imageUrls -> legacy imageUrl
+  const coverSrc =
+    project.coverImage ||
+    (project.imageUrls && project.imageUrls.length > 0
+      ? project.imageUrls[0]
+      : project.imageUrl);
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <div className="container mx-auto px-4 py-24">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">
+      <div className="container mx-auto px-4 py-12">
         <div className="mb-6">
           <Link
             href="/projects"
@@ -112,12 +121,25 @@ export default async function ProjectDetailView({ params }: DynamicPageProps) {
                   Live Demo
                 </a>
               )}
+              {/* Gallery button (client-side) */}
+              {(project.imageUrls && project.imageUrls.length > 0) ||
+              project.imageUrl ? (
+                <ProjectGallery
+                  images={
+                    (project.imageUrls && project.imageUrls.length > 0
+                      ? project.imageUrls
+                      : project.imageUrl
+                      ? [project.imageUrl]
+                      : []) as string[]
+                  }
+                />
+              ) : null}
             </div>
 
-            {project.imageUrl && (
+            {coverSrc && (
               <div className="relative w-full h-64 md:h-96 mb-8 overflow-hidden rounded-lg">
                 <img
-                  src={project.imageUrl}
+                  src={coverSrc}
                   alt={project.title}
                   className="w-full h-full object-cover"
                 />

@@ -66,13 +66,19 @@ export const createSkill = async (data: FormData) => {
 
     const name = data.get("name") as string;
     const level = data.get("level") as string;
+    const category = data.get("category") as string;
     const iconFile = data.get("file") as File;
 
     const formDataToSend = new FormData();
-    const skillData = {
+    const skillData: { name: string; level?: string; category?: string } = {
       name,
       level,
     };
+
+    // Include category if provided
+    if (category && category.trim() !== "") {
+      skillData.category = category;
+    }
 
     formDataToSend.append("data", JSON.stringify(skillData));
     if (iconFile && iconFile.size > 0) {
@@ -113,10 +119,19 @@ export const updateSkill = async (id: string, data: FormData) => {
 
     const name = data.get("name") as string;
     const level = data.get("level") as string;
+    const category = data.get("category") as string;
     const iconFile = data.get("file") as File;
 
     const formData = new FormData();
-    const skillData = { name, level };
+    const skillData: { name: string; level?: string; category?: string } = {
+      name,
+      level,
+    };
+
+    // Include category if provided
+    if (category && category.trim() !== "") {
+      skillData.category = category;
+    }
 
     formData.append("data", JSON.stringify(skillData));
 

@@ -33,10 +33,12 @@ export interface ProjectItem {
   title: string;
   description: string;
   excerpt?: string;
+  coverImage?: string;
   technologies: string[];
   githubUrl?: string;
   liveUrl?: string;
   imageUrl?: string;
+  imageUrls?: string[];
   featured: boolean;
   status?: string;
   createdAt: string;
@@ -61,6 +63,7 @@ export interface SkillItem {
   id: string;
   name: string;
   level?: string;
+  category?: string;
   iconUrl?: string;
   createdAt: string;
   updatedAt: string;
@@ -71,6 +74,7 @@ export interface SkillItem {
 export interface SkillFormData {
   name: string;
   level?: string;
+  category?: string;
   iconFile?: File;
 }
 
@@ -103,3 +107,7 @@ export interface UserSession {
   user: SessionUser;
   accessToken?: string;
 }
+
+// Type aliases for easier use
+export type Project = ProjectItem;
+export type Skill = SkillItem;

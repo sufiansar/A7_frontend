@@ -98,6 +98,31 @@ export default function CreateSkillForm() {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="category" className="text-gray-300">
+                  Category *
+                </Label>
+                <select
+                  id="category"
+                  name="category"
+                  required
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select category</option>
+                  <option value="Frontend">Frontend</option>
+                  <option value="Backend">Backend</option>
+                  <option value="Database">Database</option>
+                  <option value="DevOps">DevOps</option>
+                  <option value="Mobile">Mobile Development</option>
+                  <option value="Design">Design</option>
+                  <option value="Testing">Testing</option>
+                  <option value="Tools">Tools & Utilities</option>
+                  <option value="Language">Programming Language</option>
+                  <option value="Framework">Framework/Library</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div className="space-y-2">
                 <Label htmlFor="level" className="text-gray-300">
                   Skill Level
                 </Label>

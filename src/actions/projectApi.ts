@@ -64,38 +64,9 @@ export const getProjectById = async (id: string) => {
   }
 };
 
-export const createProject = async (data: FormData) => {
+export const createProject = async (formData: FormData) => {
   try {
     const { session } = await getAuthHeaders(false);
-
-    const title = data.get("title") as string;
-    const description = data.get("description") as string;
-    const excerpt = data.get("excerpt") as string;
-    const technologies = data.get("technologies") as string;
-    const githubUrl = data.get("githubUrl") as string;
-    const liveUrl = data.get("liveUrl") as string;
-    const featured = data.get("featured") === "true";
-    const status = data.get("status") as string;
-    const imageFile = data.get("file") as File;
-
-    const formData = new FormData();
-    const projectData = {
-      title,
-      description,
-      excerpt,
-      technologies: technologies
-        ? technologies.split(",").map((tech) => tech.trim())
-        : [],
-      githubUrl,
-      liveUrl,
-      featured,
-      status,
-    };
-
-    formData.append("data", JSON.stringify(projectData));
-    if (imageFile && imageFile.size > 0) {
-      formData.append("file", imageFile);
-    }
 
     const headers: Record<string, string> = {};
     const accessToken = (session as { accessToken?: string }).accessToken;
@@ -126,45 +97,9 @@ export const createProject = async (data: FormData) => {
   }
 };
 
-export const updateProject = async (id: string, data: FormData) => {
+export const updateProject = async (id: string, formData: FormData) => {
   try {
     const { session } = await getAuthHeaders(false);
-
-    const title = data.get("title") as string;
-    const description = data.get("description") as string;
-    const excerpt = data.get("excerpt") as string;
-    const technologies = data.get("technologies") as string;
-    const githubUrl = data.get("githubUrl") as string;
-    const liveUrl = data.get("liveUrl") as string;
-    const featured = data.get("featured") === "true";
-    const status = data.get("status") as string;
-    const imageFile = data.get("file") as File;
-    const existingImageUrl = data.get("existingImageUrl") as string;
-
-    const formData = new FormData();
-    const projectData: ProjectUpdateData = {
-      title,
-      description,
-      excerpt,
-      technologies: technologies
-        ? technologies.split(",").map((tech) => tech.trim())
-        : [],
-      githubUrl,
-      liveUrl,
-      featured,
-      status,
-    };
-
-    if (!imageFile || imageFile.size === 0) {
-      if (existingImageUrl) {
-        projectData.imageUrl = existingImageUrl;
-      }
-    }
-
-    formData.append("data", JSON.stringify(projectData));
-    if (imageFile && imageFile.size > 0) {
-      formData.append("file", imageFile);
-    }
 
     const headers: Record<string, string> = {};
     const accessToken = (session as { accessToken?: string }).accessToken;

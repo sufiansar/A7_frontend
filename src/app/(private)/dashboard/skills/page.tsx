@@ -218,6 +218,14 @@ export default function SkillsManagementDashboard() {
                     {skill.name}
                   </h3>
 
+                  {skill.category && (
+                    <div className="mb-2">
+                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                        {skill.category}
+                      </span>
+                    </div>
+                  )}
+
                   {skill.level && (
                     <span
                       className={`px-3 py-1 rounded-full text-sm font-medium ${
